@@ -6,12 +6,12 @@ from django.conf import settings
 from telebot import TeleBot, types
 
 # Enable logging
+from telebot.util import quick_markup
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
-# set higher logging level for httpx to avoid all GET and POST requests being logged
 logging.getLogger("httpx").setLevel(logging.WARNING)
-
 logger = logging.getLogger(__name__)
 
 # Объявление переменной бота
@@ -30,10 +30,15 @@ class Command(BaseCommand):
 
     @bot.message_handler(commands=['help', 'start'])
     def send_welcome(message):
+        logger.info("-------start pressed---")
         bot.reply_to(message, """\
         Hi there, I am EchoBot.
         I am here to echo your kind words back to you. Just say anything nice and I'll say the exact same thing to you!\
         """)
+
+    # @bot.message_handler(func=lambda message: True)
+    # def echo_message(message):
+    #     bot.reply_to(message, message.text)
 
     @bot.message_handler(commands=['url'])
     def url(message):
@@ -44,7 +49,12 @@ class Command(BaseCommand):
 
     @bot.message_handler(commands=['switch'])
     def switch(message):
-        markup = types.InlineKeyboardMarkup()
+        # markup = types.InlineKeyboardMarkup()
+        markup = quick_markup({
+            'Twitter': {'url': 'https://twitter.com'},
+            'Facebook': {'url': 'https://facebook.com'},
+            'Back': {'callback_data': 'whatever'}
+        }, row_width=2)
         switch_button = types.InlineKeyboardButton(text='Try', switch_inline_query="Telegram")
         markup.add(switch_button)
         bot.send_message(message.chat.id, "Выбрать чат", reply_markup=markup)

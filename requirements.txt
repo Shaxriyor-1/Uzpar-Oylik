@@ -10,3 +10,4 @@ python-telegram-bot==20.4
 sniffio==1.3.0
 sqlparse==0.4.4
 tzdata==2023.3
+pyTelegramBotAPI

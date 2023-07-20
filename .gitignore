@@ -1,1 +1,5 @@
 env
+myproject/db.sqlite3
+db.sqlite3
+myproject/.handler-saves
+.idea

@@ -1,8 +1,8 @@
 import logging
 
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
 from django.conf import settings
+from telegram import Update
+from telegram.ext import CallbackContext, CommandHandler, Updater
 
 # Enable logging
 logging.basicConfig(
@@ -27,3 +27,4 @@ def setup_telegram_bot():
     dispatcher.add_handler(start_handler)
 
     updater.start_polling()
+

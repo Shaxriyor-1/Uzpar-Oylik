@@ -8,6 +8,8 @@ from telebot import TeleBot, types
 # Enable logging
 from telebot.util import quick_markup
 
+# from .report import create_employee_reports_from_excel
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -20,11 +22,12 @@ bot = TeleBot(settings.TELEGRAM_BOT_TOKEN, threaded=False)
 
 # Load the Excel file into a DataFrame
 excel_file_path = 'D:/oylik.xlsx'
+
 df = pd.read_excel(excel_file_path)
 
 # Function to search for user data based on the provided phone number
 def get_user_data_by_phone_number(phone_number):
-    row = df[df['Phone'] == phone_number]
+    row = df[df['User'] == phone_number]
     if not row.empty:
         user_name = row.iloc[0]['Name']
         user_salary = row.iloc[0]['Salary']

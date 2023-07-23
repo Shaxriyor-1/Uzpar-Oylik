@@ -10,3 +10,10 @@ pip install -r requirements.txt
 ```
 python manage.py bot
 ```
+
+#### Populate excel reports into database
+```
+1. Add excel file in telegram_bot/reports/oylik.xslx folder
+2. Run following command for populating
+    python manage.py populate_report.py <file_name>.xls
+```

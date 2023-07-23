@@ -41,8 +41,8 @@ class User(AbstractUser):
     email = models.EmailField("Email address", null=True, blank=True, unique=True)
     phone_number = PhoneNumberField(unique=True, blank=True, null=True)
     is_phone_verified = models.BooleanField(default=False)
-    # todo need to delete field sms_code
     password = models.CharField(max_length=128, blank=True, null=True)
+    tg_chat_id = models.IntegerField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

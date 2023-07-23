@@ -76,6 +76,7 @@ class Command(BaseCommand):
             if user:
                 user.tg_chat_id = message.chat.id
                 user.save()
+                # todo get first_name, last_name from user
                 bot.send_message(message.chat.id, f"Salom, first_name last_name! Hisobotni olishingiz mumkin",
                                  reply_markup=keyboard)
             else:

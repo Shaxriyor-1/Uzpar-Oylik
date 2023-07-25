@@ -76,14 +76,9 @@ class Command(BaseCommand):
             if user:
                 user.tg_chat_id = message.chat.id
                 user.save()
-<<<<<<< HEAD
-                # toet first_name, last_name from user
-                
-=======
 
                 # todo get first_name, last_name from user
                 # Get first name and last name from the contact message
->>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
                 first_name = message.contact.first_name
                 last_name = message.contact.last_name
                 bot.send_message(message.chat.id, f"Salom, {first_name} {last_name}! Hisobotni olishingiz mumkin",
@@ -113,11 +108,7 @@ class Command(BaseCommand):
                                 """
                 bot.send_message(message.chat.id, return_mess)
         else:
-<<<<<<< HEAD
-            bot.send_message(message.chat.id, "Bunday foydalanuvchi topilmadi")
-=======
             bot.send_message(message.chat.id, "Bunday foydalanuvchi ishchilar ro'yxatida mavjud emas!")
->>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
 
 
     # @bot.message_handler(commands=['get_data'])  # Custom command to get user data

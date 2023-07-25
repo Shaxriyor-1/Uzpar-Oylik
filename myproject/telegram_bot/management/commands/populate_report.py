@@ -26,9 +26,16 @@ class Command(BaseCommand):
             print(f"Populating--", row)
             phone_number, user_name, salary, fine, prepayment, remain, *_ = row
             if phone_number:
-                # todo get value of remain from its excel formula
+                # def evaluate_formulas(worksheet):
+                #     worksheet = 'reports/oylik.xslx'
+                #     for row in worksheet.iter_rows(values_only=True):
+                #         for cell in row:
+                #             if cell is not None and isinstance(cell, str) and cell.startswith("="):
+                #                 cell.value = worksheet[cell.coordinate].value
+                # # todo get value of remain from its excel formula
                 # remain_val = sheet.cell(row=index + 1, column=6).value
                 # remain_val = 0
+<<<<<<< HEAD
                 first_name, last_name = user_name.split(" ")
                 try:
                     user = User.objects.get(phone_number=str(phone_number))
@@ -42,6 +49,11 @@ class Command(BaseCommand):
                     user = User.objects.create(phone_number=str(phone_number), first_name=first_name, last_name=last_name)
                     created = True
                 user, created = User.objects.get_or_create(phone_number=str(phone_number), first_name=first_name, last_name=last_name)
+=======
+                # todo get first_name, last_name from excel and add them in creating user here
+                first_name, last_name = user_name.split(" ")
+                user, created = User.objects.get_or_create(phone_number=str(phone_number), password=password)
+>>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
                 print("User--", user.phone_number, "Created---", created)
                 report = EmployeeReport(
                     user=user,
@@ -49,8 +61,11 @@ class Command(BaseCommand):
                     fine=fine,
                     prepayment=prepayment,
                     remain=remain,
+<<<<<<< HEAD
                     # first_name=first_name,
                     # last_name=last_name,
+=======
+>>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
                 )
                 report_list.append(report)
             else:

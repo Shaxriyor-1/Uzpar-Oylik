@@ -12,6 +12,8 @@ from telebot.util import quick_markup
 # from .report import create_employee_reports_from_excel
 from telegram_bot.models import EmployeeReport
 
+User = get_user_model()
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -74,15 +76,21 @@ class Command(BaseCommand):
             if user:
                 user.tg_chat_id = message.chat.id
                 user.save()
+<<<<<<< HEAD
                 # toet first_name, last_name from user
                 
+=======
+
+                # todo get first_name, last_name from user
+                # Get first name and last name from the contact message
+>>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
                 first_name = message.contact.first_name
                 last_name = message.contact.last_name
                 bot.send_message(message.chat.id, f"Salom, {first_name} {last_name}! Hisobotni olishingiz mumkin",
                              reply_markup=keyboard)
             else:
                 bot.send_message(message.chat.id,
-                                 f"Bu {phone_number} raqam bilan malumot topilmadi")
+                                 f"Bu {phone_number} raqam bilan malumot topilmadi, yoki bu raqam egasi 'Uzparavtotrans' AJ xodimi emas!")
 
     @bot.message_handler(func=lambda message: message.text == "Hisobotni olish")
     def handle_get_report(message):
@@ -105,7 +113,11 @@ class Command(BaseCommand):
                                 """
                 bot.send_message(message.chat.id, return_mess)
         else:
+<<<<<<< HEAD
             bot.send_message(message.chat.id, "Bunday foydalanuvchi topilmadi")
+=======
+            bot.send_message(message.chat.id, "Bunday foydalanuvchi ishchilar ro'yxatida mavjud emas!")
+>>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
 
 
     # @bot.message_handler(commands=['get_data'])  # Custom command to get user data
@@ -117,7 +129,7 @@ class Command(BaseCommand):
     #         response_message = f"User: {user_name}\nSalary: {user_salary}"
     #     else:
     #         response_message = "User not found in the database."
-    #
+    
     #     bot.reply_to(message, response_message)
 
     # @bot.message_handler(func=lambda message: True)

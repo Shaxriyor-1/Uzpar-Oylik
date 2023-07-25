@@ -26,10 +26,17 @@ class Command(BaseCommand):
             print(f"Populating--", row)
             phone_number, user_name, salary, fine, prepayment, remain, password = row
             if phone_number:
-                # todo get value of remain from its excel formula
+                # def evaluate_formulas(worksheet):
+                #     worksheet = 'reports/oylik.xslx'
+                #     for row in worksheet.iter_rows(values_only=True):
+                #         for cell in row:
+                #             if cell is not None and isinstance(cell, str) and cell.startswith("="):
+                #                 cell.value = worksheet[cell.coordinate].value
+                # # todo get value of remain from its excel formula
                 # remain_val = sheet.cell(row=index + 1, column=6).value
-                remain_val = 0
+                # remain_val = 0
                 # todo get first_name, last_name from excel and add them in creating user here
+                first_name, last_name = user_name.split(" ")
                 user, created = User.objects.get_or_create(phone_number=str(phone_number), password=password)
                 print("User--", user.phone_number, "Created---", created)
                 report = EmployeeReport(
@@ -37,7 +44,7 @@ class Command(BaseCommand):
                     salary=salary,
                     fine=fine,
                     prepayment=prepayment,
-                    remain=remain_val,
+                    remain=remain,
                 )
                 report_list.append(report)
             else:

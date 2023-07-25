@@ -13,7 +13,7 @@ python manage.py bot
 
 #### Populate excel reports into database
 ```
-1. Add excel file in telegram_bot/reports/oylik.xslx folder
+1. Add excel file in telegram_bot/reports/oylik.xlsx folder
 2. Run following command for populating
-    python manage.py populate_report.py <file_name>.xls
+    python manage.py populate_report oylik.xlsx
 ```

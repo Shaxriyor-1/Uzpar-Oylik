@@ -7,9 +7,8 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from telebot import TeleBot, types
 # Enable logging
-from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+from telebot.types import KeyboardButton, ReplyKeyboardMarkup
 from telebot.util import quick_markup
-
 # from .report import create_employee_reports_from_excel
 from telegram_bot.models import EmployeeReport
 
@@ -59,7 +58,6 @@ class Command(BaseCommand):
         welcome_text = """
             Assalomu aleykum, UzparAvtotrans AJ dagi oyliklarni hisobi botiga ulanganingiz bilan tabriklaymiz! Biz bilan ish haqi miqdorlarini bilib oling! Ish haqini ko'rish uchun telefon raqamingizni yuboring.
         """
-
         # Send a welcome message with the custom keyboard
         bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
 
@@ -67,7 +65,7 @@ class Command(BaseCommand):
     def handle_contact(message):
         print("message.chat.id", message.chat.id)
         if message.contact is not None:
-            phone_number = message.contact.phone_number
+            phone_number = message.contact.phone_number.lstrip('+')
             user = User.objects.filter(phone_number=phone_number).first()
             print("user---", user)
             keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
@@ -76,9 +74,12 @@ class Command(BaseCommand):
             if user:
                 user.tg_chat_id = message.chat.id
                 user.save()
-                # todo get first_name, last_name from user
-                bot.send_message(message.chat.id, f"Salom, first_name last_name! Hisobotni olishingiz mumkin",
-                                 reply_markup=keyboard)
+                # toet first_name, last_name from user
+                
+                first_name = message.contact.first_name
+                last_name = message.contact.last_name
+                bot.send_message(message.chat.id, f"Salom, {first_name} {last_name}! Hisobotni olishingiz mumkin",
+                             reply_markup=keyboard)
             else:
                 bot.send_message(message.chat.id,
                                  f"Bu {phone_number} raqam bilan malumot topilmadi")
@@ -87,12 +88,14 @@ class Command(BaseCommand):
     def handle_get_report(message):
         user = User.objects.filter(tg_chat_id=message.chat.id).first()
         if user:
-            report = EmployeeReport.objects.filter(user=user).order_by("created_at").first()
+            report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
             if report:
                 return_mess = f"""
+                Assalomu aleykum Nazir og'a. Sizda Iyul oyi bo'yicha quyidagi ma'lumotlar topildi:
+                Xodim: {report.user.first_name} {report.user.last_name},
                 Oylik: {report.salary},
+                Saqlash: {report.fine},
                 Avans: {report.prepayment},
-                Jarima: {report.fine},
                 Qoldiq: {report.remain},
                 """
                 bot.send_message(message.chat.id, return_mess)
@@ -102,7 +105,7 @@ class Command(BaseCommand):
                                 """
                 bot.send_message(message.chat.id, return_mess)
         else:
-            bot.send_message(message.chat.id, "Bunday foydalanivchi topilmadi")
+            bot.send_message(message.chat.id, "Bunday foydalanuvchi topilmadi")
 
 
     # @bot.message_handler(commands=['get_data'])  # Custom command to get user data

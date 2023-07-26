@@ -14,11 +14,18 @@ class BaseModel(models.Model):
 
 class EmployeeReport(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    salary = models.IntegerField()
-    prepayment = models.IntegerField()
-    fine = models.IntegerField()
-    remain = models.IntegerField()
-    # password = models.CharField(max_length=100, default='')  # Add the default value as an empty string
+    salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    prepayment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    fine = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    remain = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    department = models.CharField(max_length=100, default="Uzpar")
+    position = models.CharField(max_length=100, default="Xodim")
+    premium = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    loyalty = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    nutrition = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00)
+    region = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00)
+    tax = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00)
+    fee = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00)
     
     def __str__(self):
         return f"Id - {self.id}, {self.user.phone_number}'s Report"

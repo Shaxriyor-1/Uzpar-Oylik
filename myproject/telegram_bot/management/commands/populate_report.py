@@ -24,7 +24,7 @@ class Command(BaseCommand):
         report_list = []
         for index, row in enumerate(sheet.iter_rows(min_row=2, values_only=True)):
             print(f"Populating--", row)
-            phone_number, user_name, salary, fine, prepayment, remain, *_ = row
+            phone_number, user_name, salary, fine, prepayment, remain, department, position, premium, loyalty, nutrition, region, tax, fee, *_ = row
             if phone_number:
                 # def evaluate_formulas(worksheet):
                 #     worksheet = 'reports/oylik.xslx'
@@ -49,11 +49,7 @@ class Command(BaseCommand):
                     user = User.objects.create(phone_number=str(phone_number), first_name=first_name, last_name=last_name)
                     created = True
                 user, created = User.objects.get_or_create(phone_number=str(phone_number), first_name=first_name, last_name=last_name)
-# =======
-                # todo get first_name, last_name from excel and add them in creating user here
-                first_name, last_name = user_name.split(" ")
-                user, created = User.objects.get_or_create(phone_number=str(phone_number))
-# >>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
+
                 print("User--", user.phone_number, "Created---", created)
                 report = EmployeeReport(
                     user=user,
@@ -61,11 +57,15 @@ class Command(BaseCommand):
                     fine=fine,
                     prepayment=prepayment,
                     remain=remain,
-# <<<<<<< HEAD
-                    # first_name=first_name,
-                    # last_name=last_name,
-# =======
-# >>>>>>> 59718adf353546cc904bd7b1322fc8c9b24127d0
+                    department=department,
+                    position=position,
+                    premium=premium,
+                    loyalty=loyalty,
+                    nutrition=nutrition,
+                    region=region,
+                    tax=tax,
+                    fee=fee,
+
                 )
                 report_list.append(report)
             else:

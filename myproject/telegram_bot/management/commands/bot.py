@@ -25,21 +25,6 @@ bot = TeleBot(settings.TELEGRAM_BOT_TOKEN, threaded=False)
 
 User = get_user_model()
 
-# Load the Excel file into a DataFrame
-# excel_file_path = 'D:/oylik.xlsx'
-
-# df = pd.read_excel(excel_file_path)
-
-# Function to search for user data based on the provided phone number
-# def get_user_data_by_phone_number(phone_number):
-#     row = df[df['User'] == phone_number]
-#     if not row.empty:
-#         user_name = row.iloc[0]['Name']
-#         user_salary = row.iloc[0]['Salary']
-#         return user_name, user_salary
-#     else:
-#         return None
-
 
 # Название класса обязательно - "Command"
 class Command(BaseCommand):
@@ -77,7 +62,6 @@ class Command(BaseCommand):
                 user.tg_chat_id = message.chat.id
                 user.save()
 
-                # todo get first_name, last_name from user
                 # Get first name and last name from the contact message
                 first_name = message.contact.first_name
                 last_name = message.contact.last_name
@@ -94,12 +78,22 @@ class Command(BaseCommand):
             report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
             if report:
                 return_mess = f"""
-                Assalomu aleykum Nazir og'a. Sizda Iyul oyi bo'yicha quyidagi ma'lumotlar topildi:
-                Xodim: {report.user.first_name} {report.user.last_name},
+                Assalomu aleykum Uzparavtotrans AJ xodimi. Sizda Iyul oyi bo'yicha quyidagi ma'lumotlar topildi:
+        Bo'linma : {report.department},
+        Lavozim : {report.position},
+        Xodim: {report.user.first_name} {report.user.last_name}
                 Oylik: {report.salary},
+                            Shu jumladan : 
+                                Premiya : {report.premium}, 
+                                Visluga: {report.loyalty}, 
+                                Pitaniy: {report.nutrition}, 
+                                Rayonniy koeffitsient : {report.region}, 
                 Saqlash: {report.fine},
-                Avans: {report.prepayment},
-                Qoldiq: {report.remain},
+                            Shu jumladan : 
+                                Nalog : {report.tax}, 
+                                Vznos : {report.fee}
+        Avans: {report.prepayment},
+        Qoldiq: {report.remain},
                 """
                 bot.send_message(message.chat.id, return_mess)
             else:
@@ -111,21 +105,6 @@ class Command(BaseCommand):
             bot.send_message(message.chat.id, "Bunday foydalanuvchi ishchilar ro'yxatida mavjud emas!")
 
 
-    # @bot.message_handler(commands=['get_data'])  # Custom command to get user data
-    # def get_user_data(message):
-    #     phone_number = message.text.split(' ')[1]  # Extract the phone number from the command
-    #     user_data = get_user_data_by_phone_number(phone_number)
-    #     if user_data:
-    #         user_name, user_salary = user_data
-    #         response_message = f"User: {user_name}\nSalary: {user_salary}"
-    #     else:
-    #         response_message = "User not found in the database."
-    
-    #     bot.reply_to(message, response_message)
-
-    # @bot.message_handler(func=lambda message: True)
-    # def echo_message(message):
-    #     bot.reply_to(message, message.text)
 
     # @bot.message_handler(commands=['url'])
     # def url(message):

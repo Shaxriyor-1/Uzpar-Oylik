@@ -24,7 +24,7 @@ class Command(BaseCommand):
         report_list = []
         for index, row in enumerate(sheet.iter_rows(min_row=2, values_only=True)):
             print(f"Populating--", row)
-            phone_number, user_name, salary, fine, prepayment, remain, department, position, premium, loyalty, nutrition, region, tax, fee, year, month, *_ = row
+            phone_number, user_name, salary, fine, remain, department, position, premium_general, hourly_rate, oclade, oclade_repairment, clasify, loyalty, premium_monthly, premium_travel, premium_motivation, material_help, material_help_retire, vacation_1, vacation_2, vacation_3, nutrition, region, tax, fee, fee_prof, year, month, *_ = row
             if phone_number:
                 # def evaluate_formulas(worksheet):
                 #     worksheet = 'reports/oylik.xslx'
@@ -62,16 +62,28 @@ class Command(BaseCommand):
                     user=user,
                     salary=salary,
                     fine=fine,
-                    prepayment=prepayment,
                     remain=remain,
                     department=department,
                     position=position,
-                    premium=premium,
+                    premium_general=premium_general,
+                    hourly_rate=hourly_rate,
+                    oclade=oclade,
+                    oclade_repairment=oclade_repairment,
+                    clasify=clasify,
                     loyalty=loyalty,
+                    premium_monthly=premium_monthly,
+                    premium_travel=premium_travel,
+                    premium_motivation=premium_motivation,
+                    material_help=material_help,
+                    material_help_retire=material_help_retire,
+                    vacation_1=vacation_1,
+                    vacation_2=vacation_2,
+                    vacation_3=vacation_3,
                     nutrition=nutrition,
                     region=region,
                     tax=tax,
                     fee=fee,
+                    fee_prof=fee_prof,
                     year=year,
                     month=month,
 

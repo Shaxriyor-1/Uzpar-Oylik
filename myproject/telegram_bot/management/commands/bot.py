@@ -40,10 +40,10 @@ class Command(BaseCommand):
     def send_welcome(message):
         # Create a custom keyboard with a "Share Contact" button
         keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        share_contact_button = KeyboardButton(text="Telefon raqamni yuborish", request_contact=True)
+        share_contact_button = KeyboardButton(text="Телефон ракамни юбориш", request_contact=True)
         keyboard.add(share_contact_button)
         welcome_text = """
-            Assalomu aleykum, UzparAvtotrans AJ dagi oyliklarni hisobi botiga ulanganingiz bilan tabriklaymiz! Biz bilan ish haqi miqdorlarini bilib oling! Ish haqini ko'rish uchun telefon raqamingizni yuboring.
+            Ассалому алейкум, Uzparavtotrans AJ даги ойликларни ҳисоби ботига уланганингиз билан табриклаймиз! Биз билан иш ҳақи миқдорларини билиб олинг. Иш ҳақини кўриш учун телефон рақамингизни юборинг.
         """
         # Send a welcome message with the custom keyboard
         bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
@@ -56,7 +56,7 @@ class Command(BaseCommand):
             user = User.objects.filter(phone_number=phone_number).first()
             print("user---", user)
             keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-            get_report_button = KeyboardButton(text="Hisobotni olish - Iyul.2023")
+            get_report_button = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
             keyboard.add(get_report_button)
             if user:
                 user.tg_chat_id = message.chat.id
@@ -66,15 +66,14 @@ class Command(BaseCommand):
                 first_name = message.contact.first_name
                 last_name = message.contact.last_name
 
-
                 
-                bot.send_message(message.chat.id, f"Salom, {first_name} {last_name} ! Hisobotni olishingiz mumkin",
+                bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Ҳисоботни олишингиз мумкин",
                              reply_markup=keyboard)
             else:
                 bot.send_message(message.chat.id,
-                                 f"Bu {phone_number} raqam bilan malumot topilmadi, yoki bu raqam egasi 'Uzparavtotrans' AJ xodimi emas!")
+                                 f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас!")
 
-    @bot.message_handler(func=lambda message: message.text == "Hisobotni olish - Iyul.2023")
+    @bot.message_handler(func=lambda message: message.text == "Ҳисоботни олиш - Июл.2023")
     def handle_get_report(message):
         user = User.objects.filter(tg_chat_id=message.chat.id).first()
         if user:
@@ -83,37 +82,69 @@ class Command(BaseCommand):
             report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
             if report:
                 return_mess = f"""
-            Assalomu aleykum Uzparavtotrans AJ xodimi. Sizda Iyul oyi bo'yicha quyidagi ma'lumotlar topildi:
-    Bo'linma : {report.department},
-    Lavozim : {report.position},
-    Xodim: {report.user.first_name} {report.user.last_name} {report.user.middle_name}
+            Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июл ойи бўйича қуйидаги маълумотлар топилди:
+            Расчетный листок за Июль 2023г.
+    
+    Телефон : {report.user}
+    Сотрудник: {report.user.first_name} {report.user.last_name} {report.user.middle_name}
+    Подразделение : {report.department}
+    Должност : {report.position}
 
-            Oylik: {report.salary}
-                  Shu jumladan : 
-            Pitaniy: {report.nutrition},
-            """
+            Итого начислено: {report.salary} :
+"""
+            fields_to_check = [
+                ("Премия 'Курбан Хайит'", report.premium_general),
+                ("Часовой тариф", report.hourly_rate),
+                ("Оклад", report.oclade),
+                ("Оклад за ремонт", report.oclade_repairment),
+                ("Классност", report.clasify),
+                ("Отпуск", report.vacation_1),
+                ("Отпуск", report.vacation_2),
+                ("Отпуск доп.", report.vacation_3),
+                ("Выслугу лет", report.loyalty),
+                ("Месячная премия", report.premium_monthly),
+                ("Премия (Командировочные)", report.premium_travel),
+                ("Премия о стим. раб.", report.premium_motivation),
+                ("Районный коэффициент 50", report.region),
+                ("Материалный помош", report.material_help),
+                ("Материальная помош к отп.", report.material_help_retire),
 
-            # Check and add Premiya if it is greater than 0
-            if report.premium and report.premium > 0:
-                return_mess += f"Premiya : {report.premium}, "
+            ]
 
-            # Check and add Visluga if it is greater than 0
-            if report.loyalty and report.loyalty > 0:
-                return_mess += f"Visluga: {report.loyalty}, "
-
-            # Check and add Rayonniy koeffitsient if it is greater than 0
-            if report.region and report.region > 0:
-                return_mess += f"Rayonniy koeffitsient : {report.region}, "
+  
+            for field_name, field_value in fields_to_check:
+                if field_value and field_value > 0:
+                    return_mess += f"{field_name}: {field_value}, "         
 
             return_mess += f"""
 
-            Сакланган (удержание): {report.fine}
-                  Shu jumladan : 
-            Солик (налог): {report.tax},
-            Взнос: {report.fee}.
+                    Премия 'Курбан Хайит' : {report.premium_general}
+                Часовой тариф : {report.hourly_rate}
+                Оклад : {report.oclade}
+                Оклад за ремонт : {report.oclade_repairment}
+                Классност : {report.clasify}
+                Отпуск : {report.vacation_1}
+                Отпуск : {report.vacation_2}
+                Отпуск доп. : {report.vacation_3}
+                Выслугу лет : {report.loyalty}
+                Месячная премия : {report.premium_monthly}
+                Премия (Командировочные) : {report.premium_travel}
+                Премия о стим. раб. : {report.premium_motivation}
+                Питание : {report.nutrition}
+                Районный коэффициент 50 : {report.region}
+                Материалный помош  : {report.material_help}
+                Материальная помош к отп. : {report.material_help_retire}
 
-            Qoldiq (остаток): {report.remain},
+
+            Итого удержание : {report.fine}
+                Подоходный налог : {report.tax}
+                Взносы в пенсионный фонд : {report.fee}
+                Взносы в профсоюз : {report.fee_prof}
+
+                                
+            К выплату : {report.remain}
             """
+
                           
             bot.send_message(message.chat.id, return_mess)
         else:

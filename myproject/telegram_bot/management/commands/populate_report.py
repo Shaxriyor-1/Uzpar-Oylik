@@ -45,15 +45,23 @@ class Command(BaseCommand):
                 
                 try:
                     user = User.objects.get(phone_number=str(phone_number))
-                    # Update the user's first_name and last_name
-                    user.first_name = first_name
-                    user.last_name = last_name
-                    user.middle_name = middle_name  # Set the middle_name
-                    user.save()
-                    created = False  # Set created to False since the user already existed
+                    if user:
+                        # Update the user's first_name and last_name
+                        user.first_name = first_name
+                        user.last_name = last_name
+                        user.middle_name = middle_name  # Set the middle_name
+                        user.save()
+                        created = False  # Set created to False since the user already existed
+                    else:
+                        # If the user doesn't exist, create a new one
+                        user = User.objects.create(phone_number=str(phone_number), first_name=first_name, last_name=last_name, middle_name=middle_name)
+                        created = True
+                except IntegrityError as e:
+                    # Handle the integrity error if needed
+                    print(f"Error: {e}")
                 except User.DoesNotExist:
                     # If the user doesn't exist, create a new one
-                    user = User.objects.create(phone_number=str(phone_number), first_name=first_name, last_name=last_name)
+                    user = User.objects.create(phone_number=str(phone_number), first_name=first_name, last_name=last_name, middle_name=middle_name)
                     created = True
                 user, created = User.objects.get_or_create(phone_number=str(phone_number), first_name=first_name, last_name=last_name, middle_name=middle_name)
 

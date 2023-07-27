@@ -43,14 +43,22 @@ class User(AbstractUser):
     is_phone_verified = models.BooleanField(default=False)
     password = models.CharField(max_length=128, blank=True, null=True)
     tg_chat_id = models.IntegerField(null=True, blank=True)
+    middle_name = models.CharField(max_length=100, blank=True, null=True)  # Add middle_name field
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     object = UserManager()
 
+    # def get_full_name(self) -> str:
+    #     return super().get_full_name()
+    
     def get_full_name(self) -> str:
-        return super().get_full_name()
+        full_name = f"{self.first_name} {self.last_name}"
+        if self.middle_name:
+            full_name += f" {self.middle_name}"
+        return full_name
+    
 
     class Meta:
         verbose_name = "Пользователь"

@@ -26,6 +26,9 @@ class EmployeeReport(BaseModel):
     region = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00)
     tax = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00)
     fee = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00)
+    year = models.PositiveIntegerField(null=True, blank=True)
+    month = models.PositiveIntegerField(null=True, blank=True)
+    days = models.CharField(max_length=100, default="Ishlamagan")
     
     def __str__(self):
         return f"Id - {self.id}, {self.user.phone_number}'s Report"

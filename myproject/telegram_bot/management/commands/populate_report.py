@@ -24,7 +24,7 @@ class Command(BaseCommand):
         report_list = []
         for index, row in enumerate(sheet.iter_rows(min_row=2, values_only=True)):
             print(f"Populating--", row)
-            phone_number, user_name, salary, fine, prepayment, remain, department, position, premium, loyalty, nutrition, region, tax, fee, *_ = row
+            phone_number, user_name, salary, fine, prepayment, remain, department, position, premium, loyalty, nutrition, region, tax, fee, year, month, *_ = row
             if phone_number:
                 # def evaluate_formulas(worksheet):
                 #     worksheet = 'reports/oylik.xslx'
@@ -35,20 +35,27 @@ class Command(BaseCommand):
                 # # todo get value of remain from its excel formula
                 # remain_val = sheet.cell(row=index + 1, column=6).value
                 # remain_val = 0
-# <<<<<<< HEAD
-                first_name, last_name = user_name.split(" ")
+
+
+                # Get first name and last name from the contact message
+                name_parts = user_name.split(" ")
+                first_name = name_parts[0]
+                last_name = name_parts[1]
+                middle_name = " ".join(name_parts[2:]) if len(name_parts) >= 4 else ""
+                
                 try:
                     user = User.objects.get(phone_number=str(phone_number))
                     # Update the user's first_name and last_name
                     user.first_name = first_name
                     user.last_name = last_name
+                    user.middle_name = middle_name  # Set the middle_name
                     user.save()
                     created = False  # Set created to False since the user already existed
                 except User.DoesNotExist:
                     # If the user doesn't exist, create a new one
                     user = User.objects.create(phone_number=str(phone_number), first_name=first_name, last_name=last_name)
                     created = True
-                user, created = User.objects.get_or_create(phone_number=str(phone_number), first_name=first_name, last_name=last_name)
+                user, created = User.objects.get_or_create(phone_number=str(phone_number), first_name=first_name, last_name=last_name, middle_name=middle_name)
 
                 print("User--", user.phone_number, "Created---", created)
                 report = EmployeeReport(
@@ -65,6 +72,8 @@ class Command(BaseCommand):
                     region=region,
                     tax=tax,
                     fee=fee,
+                    year=year,
+                    month=month,
 
                 )
                 report_list.append(report)

@@ -56,7 +56,7 @@ class Command(BaseCommand):
             user = User.objects.filter(phone_number=phone_number).first()
             print("user---", user)
             keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-            get_report_button = KeyboardButton(text="Hisobotni olish")
+            get_report_button = KeyboardButton(text="Hisobotni olish - Iyul.2023")
             keyboard.add(get_report_button)
             if user:
                 user.tg_chat_id = message.chat.id
@@ -65,44 +65,59 @@ class Command(BaseCommand):
                 # Get first name and last name from the contact message
                 first_name = message.contact.first_name
                 last_name = message.contact.last_name
-                bot.send_message(message.chat.id, f"Salom, {first_name} {last_name}! Hisobotni olishingiz mumkin",
+
+
+                
+                bot.send_message(message.chat.id, f"Salom, {first_name} {last_name} ! Hisobotni olishingiz mumkin",
                              reply_markup=keyboard)
             else:
                 bot.send_message(message.chat.id,
                                  f"Bu {phone_number} raqam bilan malumot topilmadi, yoki bu raqam egasi 'Uzparavtotrans' AJ xodimi emas!")
 
-    @bot.message_handler(func=lambda message: message.text == "Hisobotni olish")
+    @bot.message_handler(func=lambda message: message.text == "Hisobotni olish - Iyul.2023")
     def handle_get_report(message):
         user = User.objects.filter(tg_chat_id=message.chat.id).first()
         if user:
+            # Get all unique years from the EmployeeReport model
+            unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
             report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
             if report:
                 return_mess = f"""
-                Assalomu aleykum Uzparavtotrans AJ xodimi. Sizda Iyul oyi bo'yicha quyidagi ma'lumotlar topildi:
-        Bo'linma : {report.department},
-        Lavozim : {report.position},
-        Xodim: {report.user.first_name} {report.user.last_name}
-                Oylik: {report.salary},
-                            Shu jumladan : 
-                                Premiya : {report.premium}, 
-                                Visluga: {report.loyalty}, 
-                                Pitaniy: {report.nutrition}, 
-                                Rayonniy koeffitsient : {report.region}, 
-                Saqlash: {report.fine},
-                            Shu jumladan : 
-                                Nalog : {report.tax}, 
-                                Vznos : {report.fee}
-        Avans: {report.prepayment},
-        Qoldiq: {report.remain},
-                """
-                bot.send_message(message.chat.id, return_mess)
-            else:
-                return_mess = f"""
-                                Malumot topilmadi
-                                """
-                bot.send_message(message.chat.id, return_mess)
+            Assalomu aleykum Uzparavtotrans AJ xodimi. Sizda Iyul oyi bo'yicha quyidagi ma'lumotlar topildi:
+    Bo'linma : {report.department},
+    Lavozim : {report.position},
+    Xodim: {report.user.first_name} {report.user.last_name} {report.user.middle_name}
+
+            Oylik: {report.salary}
+                  Shu jumladan : 
+            Pitaniy: {report.nutrition},
+            """
+
+            # Check and add Premiya if it is greater than 0
+            if report.premium and report.premium > 0:
+                return_mess += f"Premiya : {report.premium}, "
+
+            # Check and add Visluga if it is greater than 0
+            if report.loyalty and report.loyalty > 0:
+                return_mess += f"Visluga: {report.loyalty}, "
+
+            # Check and add Rayonniy koeffitsient if it is greater than 0
+            if report.region and report.region > 0:
+                return_mess += f"Rayonniy koeffitsient : {report.region}, "
+
+            return_mess += f"""
+
+            Сакланган (удержание): {report.fine}
+                  Shu jumladan : 
+            Солик (налог): {report.tax},
+            Взнос: {report.fee}.
+
+            Qoldiq (остаток): {report.remain},
+            """
+                          
+            bot.send_message(message.chat.id, return_mess)
         else:
-            bot.send_message(message.chat.id, "Bunday foydalanuvchi ishchilar ro'yxatida mavjud emas!")
+            bot.send_message(message.chat.id, "Bunday foydalanuvchi ishchilar ro'yxatida mavjud emas! Agar bu xatolik bo'lsa bosing : /start")
 
 
 

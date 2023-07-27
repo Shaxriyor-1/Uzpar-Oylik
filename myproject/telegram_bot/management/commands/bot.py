@@ -86,12 +86,12 @@ class Command(BaseCommand):
             
         Расчетный листок за Июль 2023г.
             
-        1. Телефон : {report.user}
-        2. Сотрудник: {report.user.first_name} {report.user.last_name} {report.user.middle_name}
-        3. Подразделение : {report.department}
-        4. Должност : {report.position}
+        I.    *Телефон* : `{report.user}`
+              *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
+              *Подразделение* : {report.department}
+              *Должност* : __{report.position}__
 
-        5. Итого начислено: {report.salary} :
+        II.   *Итого начислено* : `{report.salary}` : \n
 """
             fields_to_check = [
                 ("Премия 'Курбан Хайит'", report.premium_general),
@@ -111,45 +111,24 @@ class Command(BaseCommand):
                 ("Материалный помош", report.material_help),
                 ("Материальная помош к отп.", report.material_help_retire),
 
-            ]
+                ]
 
             for field_name, field_value in fields_to_check:
                 if field_value and field_value > 0:
-                    return_mess += f"{field_name}: {field_value}, "         
+                    return_mess += f"                    {field_name}: {field_value}, \n"         
 
-            # return_mess += f"""
-
-            #     Премия 'Курбан Хайит' : {report.premium_general}
-            #     Часовой тариф : {report.hourly_rate}
-            #     Оклад : {report.oclade}
-            #     Оклад за ремонт : {report.oclade_repairment}
-            #     Классност : {report.clasify}
-            #     Отпуск : {report.vacation_1}
-            #     Отпуск : {report.vacation_2}
-            #     Отпуск доп. : {report.vacation_3}
-            #     Выслугу лет : {report.loyalty}
-            #     Месячная премия : {report.premium_monthly}
-            #     Премия (Командировочные) : {report.premium_travel}
-            #     Премия о стим. раб. : {report.premium_motivation}
-            #     Питание : {report.nutrition}
-            #     Районный коэффициент 50 : {report.region}
-            #     Материалный помош  : {report.material_help}
-            #     Материальная помош к отп. : {report.material_help_retire}"""
-
-            return_mess += f""" 
-            6. Итого удержание : {report.fine}
             
-                    
+            return_mess += f""" 
+        III.   *Итого удержание* : `{report.fine}` \n
                     Подоходный налог : {report.tax}
                     Взносы в пенсионный фонд : {report.fee}
                     Взносы в профсоюз : {report.fee_prof}
-
                                 
-            К выплату : {report.remain}
+        IV.   *К выплату* : `{report.remain}`
             """
 
                           
-            bot.send_message(message.chat.id, return_mess)
+            bot.send_message(message.chat.id, return_mess, parse_mode="Markdown")
         else:
             bot.send_message(message.chat.id, "Bunday foydalanuvchi ishchilar ro'yxatida mavjud emas! Agar bu xatolik bo'lsa bosing : /start")
 

@@ -81,6 +81,9 @@ class Command(BaseCommand):
             unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
             report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
             if report:
+                salary_value = report.salary
+                fine_value = report.fine
+                remain_value = report.remain
                 return_mess = f"""
             Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июл ойи бўйича қуйидаги маълумотлар топилди:
             
@@ -91,7 +94,7 @@ class Command(BaseCommand):
               *Подразделение* : {report.department}
               *Должност* : __{report.position}__
 
-        II.   *Итого начислено* : `{report.salary}` : \n
+        II.   *Итого начислено* : `{salary_value}` : \n
 """
             fields_to_check = [
                 ("Премия 'Курбан Хайит'", report.premium_general),
@@ -114,23 +117,23 @@ class Command(BaseCommand):
                 ]
 
             for field_name, field_value in fields_to_check:
-                if field_value and field_value > 0:
+                if (field_value is not None) and (field_value != 0) :
                     return_mess += f"                    {field_name}: {field_value}, \n"         
 
             
             return_mess += f""" 
-        III.   *Итого удержание* : `{report.fine}` \n
+        III.   *Итого удержание* : `{fine_value}` \n
                     Подоходный налог : {report.tax}
                     Взносы в пенсионный фонд : {report.fee}
                     Взносы в профсоюз : {report.fee_prof}
                                 
-        IV.   *К выплату* : `{report.remain}`
+        IV.   *К выплату* : `{remain_value}`
             """
 
                           
             bot.send_message(message.chat.id, return_mess, parse_mode="Markdown")
         else:
-            bot.send_message(message.chat.id, "Bunday foydalanuvchi ishchilar ro'yxatida mavjud emas! Agar bu xatolik bo'lsa bosing : /start")
+            bot.send_message(message.chat.id, "Бундай фойдаланувчи ишчилар руйхатида мавжуд эмас! Агар бу хатолик булса босинг : /start")
 
 
 

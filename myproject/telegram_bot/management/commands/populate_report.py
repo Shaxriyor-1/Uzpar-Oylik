@@ -22,9 +22,15 @@ class Command(BaseCommand):
         workbook = openpyxl.load_workbook(file_path)
         sheet = workbook.active
         report_list = []
+
+
+
         for index, row in enumerate(sheet.iter_rows(min_row=2, values_only=True)):
             print(f"Populating--", row)
             phone_number, user_name, salary, fine, remain, department, position, premium_general, hourly_rate, oclade, oclade_repairment, clasify, loyalty, premium_monthly, premium_travel, premium_motivation, material_help, material_help_retire, vacation_1, vacation_2, vacation_3, nutrition, region, tax, fee, fee_prof, year, month, *_ = row
+            
+             # Evaluate formulas for the columns with Excel formulas
+
             if phone_number:
                 # def evaluate_formulas(worksheet):
                 #     worksheet = 'reports/oylik.xslx'

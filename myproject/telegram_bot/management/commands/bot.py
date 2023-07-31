@@ -1,6 +1,7 @@
 import datetime
 import logging
-
+import openpyxl
+import os
 import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -81,9 +82,8 @@ class Command(BaseCommand):
             unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
             report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
             if report:
-                salary_value = report.salary
-                fine_value = report.fine
-                remain_value = report.remain
+
+
                 return_mess = f"""
             Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июл ойи бўйича қуйидаги маълумотлар топилди:
             
@@ -94,7 +94,7 @@ class Command(BaseCommand):
               *Подразделение* : {report.department}
               *Должност* : __{report.position}__
 
-        II.   *Итого начислено* : `{salary_value}` : \n
+        II.   *Итого начислено* : `{report.salary}` : \n
 """
             fields_to_check = [
                 ("Премия 'Курбан Хайит'", report.premium_general),
@@ -122,12 +122,12 @@ class Command(BaseCommand):
 
             
             return_mess += f""" 
-        III.   *Итого удержание* : `{fine_value}` \n
+        III.   *Итого удержание* : `{report.fine}` \n
                     Подоходный налог : {report.tax}
                     Взносы в пенсионный фонд : {report.fee}
                     Взносы в профсоюз : {report.fee_prof}
                                 
-        IV.   *К выплату* : `{remain_value}`
+        IV.   *К выплату* : `{report.remain}`
             """
 
                           

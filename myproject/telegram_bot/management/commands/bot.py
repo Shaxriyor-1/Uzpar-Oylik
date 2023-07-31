@@ -1,7 +1,8 @@
 import datetime
 import logging
-import openpyxl
 import os
+
+import openpyxl
 import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -87,13 +88,13 @@ def handle_get_report(message):
             return_mess = f"""
         Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июль ойи бўйича қуйидаги маълумотлар топилди:
         
-    Расчетный листок за Июль 2023г.
+    Расчетный листок за {report.month} 2023г.
         
     I.    *Телефон* : `{report.user}`
-            *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
-            *Подразделение* : {report.department}
-            *Должност* : __{report.position}__
-            *Оклад/Тариф* : __{report.oclade_tarif}__
+          *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
+          *Подразделение* : {report.department}
+          *Должност* : __{report.position}__
+          *Оклад/Тариф* : __{report.oclade_tarif}__
 
     II.   *Итого начислено* : `{report.salary}` : \n
 """
@@ -150,7 +151,7 @@ def handle_get_report(message):
 
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"                    {field_name}: {field_value}, \n"         
+                return_mess += f"       {field_name}: {field_value}, \n"         
 
         
         return_mess += f""" 
@@ -181,7 +182,7 @@ def handle_get_report(message):
             ]
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"                    {field_name}: {field_value}, \n"         
+                return_mess += f"       {field_name}: {field_value}, \n"         
 
         
         return_mess += f""" 

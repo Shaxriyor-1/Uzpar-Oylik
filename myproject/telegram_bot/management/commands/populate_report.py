@@ -73,7 +73,6 @@ class Command(BaseCommand):
 
                 print("User--", user.phone_number, "Created---", created)
                 report = EmployeeReport(
-                    id=id,
                     user=user,
                     position=position,
                     department=department,

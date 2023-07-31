@@ -72,68 +72,126 @@ class Command(BaseCommand):
                              reply_markup=keyboard)
             else:
                 bot.send_message(message.chat.id,
-                                 f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас!")
+                                 f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
 
-    @bot.message_handler(func=lambda message: message.text == "Ҳисоботни олиш - Июл.2023")
-    def handle_get_report(message):
-        user = User.objects.filter(tg_chat_id=message.chat.id).first()
-        if user:
-            # Get all unique years from the EmployeeReport model
-            unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
-            report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
-            if report:
+@bot.message_handler(func=lambda message: message.text == "Ҳисоботни олиш - Июл.2023")
+def handle_get_report(message):
+    user = User.objects.filter(tg_chat_id=message.chat.id).first()
+    if user:
+        # Get all unique years from the EmployeeReport model
+        unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
+        report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
+        if report:
 
 
-                return_mess = f"""
-            Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июл ойи бўйича қуйидаги маълумотлар топилди:
-            
-        Расчетный листок за Июль 2023г.
-            
-        I.    *Телефон* : `{report.user}`
-              *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
-              *Подразделение* : {report.department}
-              *Должност* : __{report.position}__
+            return_mess = f"""
+        Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июль ойи бўйича қуйидаги маълумотлар топилди:
+        
+    Расчетный листок за Июль 2023г.
+        
+    I.    *Телефон* : `{report.user}`
+            *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
+            *Подразделение* : {report.department}
+            *Должност* : __{report.position}__
+            *Оклад/Тариф* : __{report.oclade_tarif}__
 
-        II.   *Итого начислено* : `{report.salary}` : \n
+    II.   *Итого начислено* : `{report.salary}` : \n
 """
-            fields_to_check = [
-                ("Премия 'Курбан Хайит'", report.premium_general),
-                ("Часовой тариф", report.hourly_rate),
-                ("Оклад", report.oclade),
-                ("Оклад за ремонт", report.oclade_repairment),
-                ("Классност", report.clasify),
-                ("Отпуск", report.vacation_1),
-                ("Отпуск", report.vacation_2),
-                ("Отпуск доп.", report.vacation_3),
-                ("Выслугу лет", report.loyalty),
-                ("Месячная премия", report.premium_monthly),
-                ("Премия (Командировочные)", report.premium_travel),
-                ("Премия о стим. раб.", report.premium_motivation),
-                ("Питание", report.nutrition),
-                ("Районный коэффициент 50", report.region),
-                ("Материалный помош", report.material_help),
-                ("Материальная помош к отп.", report.material_help_retire),
+        fields_to_check = [
+            ("Премия 'Курбан Хайит'", report.premium_kurban),
+            ("Компенсация  при прекрашении трудового договора", report.compensation_work_stop),
+            ("Премия 'Мустакиллик'", report.premium_independentDay),
+            ("Матер/ная помощь пенсионерам и инвалидам", report.material_help_retire_injury),
+            ("Премия к дню Конституции", report.premium_constitution),
+            ("Увечье", report.injury),
+            ("Премия 'Навруз'", report.premium_Navruz),
+            ('Премия " 9 МАЯ "', report.premium_9May),
+            ("Учеба", report.study),
+            ("Компенсация за неиспользованный отпуск", report.compensation_unused_vac),
+            ("Больничный АУП", report.hospitalAUP),
+            ("Оклад за дни ремонта", report.oclade_repairment),
+            ("Оклад", report.oclade),
+            ("Тариф", report.tariff),
+            ("Больничные", report.hospitalGen),
+            ("Отпуск ", report.vacation),
+            ("Отпуск дополнительный", report.vacation_add),
+            ("Ночные часы", report.night_shift),
+            ("Надбавка", report.surcharge),
+            ("Классность", report.clasify),
+            ("Вредность", report.harmfulness),
+            ("Выслугу лет", report.loyalty),
+            ("Доплата за совмещение", report.cumulative_surcharge),
+            ("Мат. пом. на лечение (раздел 9 пункт 9.16 стац лечение)", report.material_help_cure),
+            ("Материальная помощь по  (бракосочетание)", report.material_help_marriage),
+            ("Командировочные ", report.travel),
+            ("Единовременная премия к юбилею", report.premium_anniversary),
+            ("ПРЕМИЯ Руза хайит", report.premium_ramadan),
+            ("Месячная премия", report.premium_monthly),
+            ("Премия исполнительному Органу АО 'Узпаравтотранс'", report.premium_executives),
+            ("Выходные", report.day_off),
+            ("Премия по хоз деятельности", report.premium_house),
+            ("Премия к празднику", report.premium_holiday),
+            ("Приказ № наблюдат/совет", report.premium_order_advice),
+            ("Доплата участникам афганской войны", report.afghan_war_people),
+            ("Ремонт", report.repairment),
+            ("Суточные по лимиту", report.per_day_limit),
+            ("Премия (Командировочные)", report.premium_travel),
+            ("Премия о стим. раб.", report.premium_motivation),
+            ("Суточные  сверх лимита", report.per_day_full_limit),
+            ("Декр. больничные", report.maternity_leave),
+            ("Материальная помощь раздел Х пункт 9,4 (уход на пенсию)", report.material_help_pansion),
+            ("Питание (Доплата за питание)", report.nutrition),
+            ("Материальная помощь в связи со смертью", report.material_help_death),
+            ("Районный коэффициент", report.region),
+            ("Материальная помощь к отпуску", report.material_help_vac),
+            ("Юбиляры до 12минЗП", report.anniversaryx12),
 
-                ]
+            ]
 
-            for field_name, field_value in fields_to_check:
-                if (field_value is not None) and (field_value != 0) :
-                    return_mess += f"                    {field_name}: {field_value}, \n"         
+        for field_name, field_value in fields_to_check:
+            if (field_value is not None) and (field_value != 0) :
+                return_mess += f"                    {field_name}: {field_value}, \n"         
 
-            
-            return_mess += f""" 
-        III.   *Итого удержание* : `{report.fine}` \n
-                    Подоходный налог : {report.tax}
-                    Взносы в пенсионный фонд : {report.fee}
-                    Взносы в профсоюз : {report.fee_prof}
-                                
-        IV.   *К выплату* : `{report.remain}`
-            """
+        
+        return_mess += f""" 
+    III.   *Итого удержание* : `{report.fine}` \n
+"""
+        fields_to_check = [
+            ("Удержание  по акту инвентаризации", report.inventarization_fee),
+            ("Сог.справки", report.Sogspravki_fee),
+            ("Удержание за приобретения ТМЦ'", report.tmz_fee),
+            ("Страхование  жизни ", report.insurance_life),
+            ("Удержание Страхование", report.insurance),
+            ("Гос/пошлина", report.Gosposhlina_fee),
+            ("Подоходный налог", report.tax),
+            ("Взносы в профсоюз", report.union_fee),
+            ("Алименты", report.alimony),
+            ("Партийные взносы 0,5%", report.partly_union_fee),
+            ("Удержание за санаторные  путевки", report.sanatorium_vouchers_fee),
+            ("Удержание за проживание в гостинице", report.hotel_live_fee),
+            ("Удержание за Сотовую связь", report.phone_monthly_fee),
+            ("Удержание за ГСМ", report.GSM_fee),
+            ("Удержание за питание", report.nutrition_fee),
+            ("Удержание Ипотечный кредит", report.loan_credit_ipoteka),
+            ("Удержание За обучение (уменьшает НОБ)", report.study_fee),
+            ("Удержание кредит", report.loan_credit_fee),
+            ("Удержание спец.одежды", report.special_uniform_fee),
+            ("Удержание согласно Акта проверки", report.report_fee),
 
-                          
-            bot.send_message(message.chat.id, return_mess, parse_mode="Markdown")
-        else:
-            bot.send_message(message.chat.id, "Бундай фойдаланувчи ишчилар руйхатида мавжуд эмас! Агар бу хатолик булса босинг : /start")
+            ]
+        for field_name, field_value in fields_to_check:
+            if (field_value is not None) and (field_value != 0) :
+                return_mess += f"                    {field_name}: {field_value}, \n"         
+
+        
+        return_mess += f""" 
+    IV.   *К выплату* : `{report.remain}`
+        """
+
+                        
+        bot.send_message(message.chat.id, return_mess, parse_mode="Markdown")
+    else:
+        bot.send_message(message.chat.id, "Бундай фойдаланувчи ишчилар руйхатида мавжуд эмас! Агар бу хатолик булса босинг : /start")
 
 
 

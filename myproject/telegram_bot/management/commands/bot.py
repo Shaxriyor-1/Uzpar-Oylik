@@ -1,7 +1,8 @@
 import datetime
 import logging
-import openpyxl
 import os
+
+import openpyxl
 import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -90,7 +91,7 @@ def handle_get_report(message):
             return_mess = f"""
         Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июль ойи бўйича қуйидаги маълумотлар топилди:
         
-    Расчетный листок за Июль 2023г.
+    Расчетный листок за {report.month} 2023г.
         
     I.    *Телефон* : `{report.user}`
           *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__

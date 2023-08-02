@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from datetime import datetime, timedelta
+import calendar
 
 User = get_user_model()
 
@@ -93,3 +95,22 @@ class EmployeeReport(BaseModel):
     
     def __str__(self):
         return f"Id - {self.id}, {self.user.phone_number}'s Report"
+    
+    def save(self, *args, **kwargs):
+        # Get the current date
+        current_date = datetime.now()
+
+         # Calculate the last month
+        last_month = current_date.month - 1 if current_date.month > 1 else 12
+        last_year = current_date.year if current_date.month > 1 else current_date.year - 1
+
+        # Set the month and year fields
+        self.month = last_month
+        self.year = last_year
+
+        super(EmployeeReport, self).save(*args, **kwargs)
+
+    def get_month_name(self):
+        if self.month:
+            return calendar.month_name[self.month]
+        return "Unknown"

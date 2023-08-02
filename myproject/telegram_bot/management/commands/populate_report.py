@@ -154,6 +154,7 @@ class Command(BaseCommand):
                     year=year,
                     month=month,
 
+
                 )
                 report_list.append(report)
             else:

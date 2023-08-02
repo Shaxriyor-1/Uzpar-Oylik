@@ -74,6 +74,9 @@ class Command(BaseCommand):
                 bot.send_message(message.chat.id,
                                  f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
 
+def format_number(number):
+    return '{:,}'.format(number).replace(',', ' ')
+
 @bot.message_handler(func=lambda message: message.text == "Ҳисоботни олиш - Июл.2023")
 def handle_get_report(message):
     user = User.objects.filter(tg_chat_id=message.chat.id).first()
@@ -90,22 +93,22 @@ def handle_get_report(message):
     Расчетный листок за Июль 2023г.
         
     I.    *Телефон* : `{report.user}`
-            *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
-            *Подразделение* : {report.department}
-            *Должност* : __{report.position}__
-            *Оклад/Тариф* : __{report.oclade_tarif}__
+          *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
+          *Подразделение* : {report.department}
+          *Должност* : __{report.position}__
+          *Оклад/Тариф* : __{report.oclade_tarif}__
 
-    II.   *Итого начислено* : `{report.salary}` : \n
+    II.   *Итого начислено* : `{format_number(report.salary)}` : \n
 """
         fields_to_check = [
-            ("Премия 'Курбан Хайит'", report.premium_kurban),
+            ("*Премия 'Курбан Хайит'*", report.premium_kurban),
             ("Компенсация  при прекрашении трудового договора", report.compensation_work_stop),
-            ("Премия 'Мустакиллик'", report.premium_independentDay),
+            ("*Премия 'Мустакиллик'*", report.premium_independentDay),
             ("Матер/ная помощь пенсионерам и инвалидам", report.material_help_retire_injury),
-            ("Премия к дню Конституции", report.premium_constitution),
+            ("*Премия к дню Конституции*", report.premium_constitution),
             ("Увечье", report.injury),
-            ("Премия 'Навруз'", report.premium_Navruz),
-            ('Премия " 9 МАЯ "', report.premium_9May),
+            ("*Премия 'Навруз'*", report.premium_Navruz),
+            ('*Премия " 9 МАЯ "*', report.premium_9May),
             ("Учеба", report.study),
             ("Компенсация за неиспользованный отпуск", report.compensation_unused_vac),
             ("Больничный АУП", report.hospitalAUP),
@@ -124,15 +127,15 @@ def handle_get_report(message):
             ("Мат. пом. на лечение (раздел 9 пункт 9.16 стац лечение)", report.material_help_cure),
             ("Материальная помощь по  (бракосочетание)", report.material_help_marriage),
             ("Командировочные ", report.travel),
-            ("Единовременная премия к юбилею", report.premium_anniversary),
-            ("ПРЕМИЯ Руза хайит", report.premium_ramadan),
+            ("*Единовременная премия к юбилею*", report.premium_anniversary),
+            ("*ПРЕМИЯ Руза хайит*", report.premium_ramadan),
             ("Месячная премия", report.premium_monthly),
             ("Премия исполнительному Органу АО 'Узпаравтотранс'", report.premium_executives),
             ("Выходные", report.day_off),
             ("Премия по хоз деятельности", report.premium_house),
-            ("Премия к празднику", report.premium_holiday),
+            ("*Премия к празднику*", report.premium_holiday),
             ("Приказ № наблюдат/совет", report.premium_order_advice),
-            ("Доплата участникам афганской войны", report.afghan_war_people),
+            ("*Доплата участникам афганской войны*", report.afghan_war_people),
             ("Ремонт", report.repairment),
             ("Суточные по лимиту", report.per_day_limit),
             ("Премия (Командировочные)", report.premium_travel),
@@ -144,17 +147,17 @@ def handle_get_report(message):
             ("Материальная помощь в связи со смертью", report.material_help_death),
             ("Районный коэффициент", report.region),
             ("Материальная помощь к отпуску", report.material_help_vac),
-            ("Юбиляры до 12минЗП", report.anniversaryx12),
+            ("*Юбиляры до 12минЗП*", report.anniversaryx12),
 
             ]
 
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"                    {field_name}: {field_value}, \n"         
+                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
 
         
         return_mess += f""" 
-    III.   *Итого удержание* : `{report.fine}` \n
+    III.   *Итого удержание* : `{format_number(report.fine)}` \n
 """
         fields_to_check = [
             ("Удержание  по акту инвентаризации", report.inventarization_fee),
@@ -181,11 +184,11 @@ def handle_get_report(message):
             ]
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"                    {field_name}: {field_value}, \n"         
+                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
 
         
         return_mess += f""" 
-    IV.   *К выплату* : `{report.remain}`
+    IV.   *К выплату* : `{format_number(report.remain)}`
         """
 
                         

@@ -27,6 +27,8 @@ bot = TeleBot(settings.TELEGRAM_BOT_TOKEN, threaded=False)
 
 User = get_user_model()
 
+def format_number(number):
+    return '{:,}'.format(number).replace(',', ' ')
 
 # Название класса обязательно - "Command"
 class Command(BaseCommand):
@@ -57,9 +59,14 @@ class Command(BaseCommand):
             phone_number = message.contact.phone_number.lstrip('+')
             user = User.objects.filter(phone_number=phone_number).first()
             print("user---", user)
-            keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-            get_report_button = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
-            keyboard.add(get_report_button)
+            keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+
+            get_year_2022 = KeyboardButton(text="2022")
+            get_year_2023 = KeyboardButton(text="2023")
+            get_year_2024 = KeyboardButton(text="2024")
+            get_year_2025 = KeyboardButton(text="2025")
+            # get_report_button = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
+            keyboard.add(get_year_2022, get_year_2023, get_year_2024, get_year_2025)
             if user:
                 user.tg_chat_id = message.chat.id
                 user.save()
@@ -71,12 +78,28 @@ class Command(BaseCommand):
                 
                 bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Ҳисоботни олишингиз мумкин",
                              reply_markup=keyboard)
+                
             else:
                 bot.send_message(message.chat.id,
                                  f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
 
-def format_number(number):
-    return '{:,}'.format(number).replace(',', ' ')
+
+@bot.message_handler(func=lambda message: message.text == "2023")
+def handle_2023(message):
+    # Create a new keyboard with the "Ҳисоботни олиш - Июл.2023" button
+    keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    report_button_July = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
+    keyboard.add(report_button_July)
+
+    # Send the new keyboard as a reply to the "2023" button press
+    bot.send_message(message.chat.id, "Партиянка ойини танланг:", reply_markup=keyboard)
+
+# Add a handler for other buttons (2022, 2024, 2025)
+@bot.message_handler(func=lambda message: message.text in ["2022", "2024", "2025"])
+def handle_other_years(message):
+    bot.send_message(message.chat.id, "Хозирча малумот мавжуд эмас.")
+
+
 
 @bot.message_handler(func=lambda message: message.text == "Ҳисоботни олиш - Июл.2023")
 def handle_get_report(message):
@@ -91,13 +114,13 @@ def handle_get_report(message):
             return_mess = f"""
         Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июль ойи бўйича қуйидаги маълумотлар топилди:
         
-    Расчетный листок за {report.month} 2023г.
+    Расчетный листок за Июль 2023г.
         
     I.    *Телефон* : `{report.user}`
-          *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
-          *Подразделение* : {report.department}
-          *Должност* : __{report.position}__
-          *Оклад/Тариф* : __{report.oclade_tarif}__
+        *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
+        *Подразделение* : {report.department}
+        *Должност* : __{report.position}__
+        *Оклад/Тариф* : __{report.oclade_tarif}__
 
     II.   *Итого начислено* : `{format_number(report.salary)}` : \n
 """
@@ -198,7 +221,6 @@ def handle_get_report(message):
         bot.send_message(message.chat.id, "Бундай фойдаланувчи ишчилар руйхатида мавжуд эмас! Агар бу хатолик булса босинг : /start")
 
 
-
     # @bot.message_handler(commands=['url'])
     # def url(message):
     #     markup = types.InlineKeyboardMarkup()
@@ -219,11 +241,4 @@ def handle_get_report(message):
         bot.send_message(message.chat.id, "Выбрать чат", reply_markup=markup)
     
 
-    # @bot.callback_query_handler(func=lambda call: True)
-    # def test_callback(call):  # <- passes a CallbackQuery type object to your function
-    #     logger.info(call)
-
-    # @bot.inline_handler(lambda query: query.query == 'text')
-    # def query_text(inline_query):
-    #     logger.info(inline_query)
         

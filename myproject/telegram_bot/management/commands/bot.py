@@ -30,6 +30,21 @@ User = get_user_model()
 def format_number(number):
     return '{:,}'.format(number).replace(',', ' ')
 
+verified_secret_codes = {}
+
+def reset_user_verification(chat_id):
+    verified_secret_codes[chat_id] = False
+
+def is_valid_secret_code(code):
+    print("code.chat.id", code.chat.id)
+    user = User.objects.filter(tg_chat_id=code.chat.id).first()
+    # Check the secret code against the password in the Excel file
+    if user:
+        unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
+        report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
+        excel_password = report.password
+        return code == excel_password
+
 # Название класса обязательно - "Command"
 class Command(BaseCommand):
     # Используется как описание команды обычно
@@ -42,6 +57,8 @@ class Command(BaseCommand):
 
     @bot.message_handler(commands=['start'])
     def send_welcome(message):
+        # Reset the verification for the user when they start the bot
+        reset_user_verification(message.chat.id)
         # Create a custom keyboard with a "Share Contact" button
         keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
         share_contact_button = KeyboardButton(text="Телефон ракамни юбориш", request_contact=True)
@@ -61,12 +78,12 @@ class Command(BaseCommand):
             print("user---", user)
             keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
 
-            get_year_2022 = KeyboardButton(text="2022")
-            get_year_2023 = KeyboardButton(text="2023")
-            get_year_2024 = KeyboardButton(text="2024")
-            get_year_2025 = KeyboardButton(text="2025")
+            # get_year_2022 = KeyboardButton(text="2022")
+            # get_year_2023 = KeyboardButton(text="2023")
+            # get_year_2024 = KeyboardButton(text="2024")
+            # get_year_2025 = KeyboardButton(text="2025")
             # get_report_button = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
-            keyboard.add(get_year_2022, get_year_2023, get_year_2024, get_year_2025)
+            # keyboard.add(get_year_2022, get_year_2023, get_year_2024, get_year_2025)
             if user:
                 user.tg_chat_id = message.chat.id
                 user.save()
@@ -76,47 +93,76 @@ class Command(BaseCommand):
                 last_name = message.contact.last_name
 
                 
-                bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Ҳисоботни олишингиз мумкин",
+                bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Ҳисоботни олиш учун махсус 6 белгили кодни киритинг.",
                              reply_markup=keyboard)
                 
             else:
                 bot.send_message(message.chat.id,
                                  f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
 
+# Add a handler for secret code message
+@bot.message_handler(func=lambda message: message.text and len(message.text) == 6)
+def handle_secret_code(message):
+    user = User.objects.filter(tg_chat_id=message.chat.id).first()
+    if user:
+        unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
+        report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
+        excel_password = report.password
+        if excel_password and message.text == excel_password:
+            verified_secret_codes[message.chat.id] = True
+            keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+            get_year_2022 = KeyboardButton(text="2022")
+            get_year_2023 = KeyboardButton(text="2023")
+            get_year_2024 = KeyboardButton(text="2024")
+            get_year_2025 = KeyboardButton(text="2025")
+            keyboard.add(get_year_2022, get_year_2023, get_year_2024, get_year_2025)
+            bot.send_message(message.chat.id, "Махсус код тасдикланди. Хисобот учун йилни танланг:", reply_markup=keyboard)
+        else:
+            bot.send_message(message.chat.id, "Махсус код нотогри киритилди. Илтимос кайта уриниб куринг")
+    # else:
+    #     bot.send_message(message.chat.id, "User not found. Please enter your phone number first using the /start command.")
 
 @bot.message_handler(func=lambda message: message.text == "2023")
 def handle_2023(message):
-    # Create a new keyboard with the "Ҳисоботни олиш - Июл.2023" button
-    keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    report_button_July = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
-    keyboard.add(report_button_July)
-
-    # Send the new keyboard as a reply to the "2023" button press
-    bot.send_message(message.chat.id, "Партиянка ойини танланг:", reply_markup=keyboard)
+    # Check if the secret code is verified for the user
+    user = User.objects.filter(tg_chat_id=message.chat.id).first()
+    if message.chat.id in verified_secret_codes and verified_secret_codes[message.chat.id]:
+        # Create a new keyboard with the "Ҳисоботни олиш - Июл.2023" button
+        keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        report_button_July = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
+        keyboard.add(report_button_July)
+        # Send the new keyboard as a reply to the "2023" button press
+        bot.send_message(message.chat.id, "Партиянка ойини танланг:", reply_markup=keyboard)
 
 # Add a handler for other buttons (2022, 2024, 2025)
 @bot.message_handler(func=lambda message: message.text in ["2022", "2024", "2025"])
 def handle_other_years(message):
-    bot.send_message(message.chat.id, "Хозирча малумот мавжуд эмас.")
+    # Check if the secret code is verified for the user
+    user = User.objects.filter(tg_chat_id=message.chat.id).first()
+    if message.chat.id in verified_secret_codes and verified_secret_codes[message.chat.id]:
+        bot.send_message(message.chat.id, "Хозирча малумот мавжуд эмас.")
 
 
 
 @bot.message_handler(func=lambda message: message.text == "Ҳисоботни олиш - Июл.2023")
 def handle_get_report(message):
+     # Check if the secret code is verified for the user
     user = User.objects.filter(tg_chat_id=message.chat.id).first()
-    if user:
-        # Get all unique years from the EmployeeReport model
-        unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
-        report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
-        if report:
+    if message.chat.id in verified_secret_codes and verified_secret_codes[message.chat.id]:
+        user = User.objects.filter(tg_chat_id=message.chat.id).first()
+        if user:
+            # Get all unique years from the EmployeeReport model
+            unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
+            report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
+            if report:
 
 
-            return_mess = f"""
-        Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда Июль ойи бўйича қуйидаги маълумотлар топилди:
+                return_mess = f"""
+        Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда {report.month} ойи бўйича қуйидаги маълумотлар топилди:
         
-    Расчетный листок за Июль 2023г.
+    Расчетный листок за {report.month} {report.year}г.
         
-    I.    *Телефон* : `{report.user}`
+    I.  *Телефон* : `{report.user}`
         *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
         *Подразделение* : {report.department}
         *Должност* : __{report.position}__

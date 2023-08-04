@@ -1,5 +1,6 @@
 import os
-
+import datetime
+from dateutil.relativedelta import relativedelta
 import openpyxl
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
@@ -8,7 +9,11 @@ from telegram_bot.models import EmployeeReport
 
 User = get_user_model()
 
+current_date = datetime.datetime.now()
+last_month = current_date - relativedelta(months=1)
 
+year_l = last_month.year
+month_l = last_month.month
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
@@ -27,11 +32,11 @@ class Command(BaseCommand):
 
         for index, row in enumerate(sheet.iter_rows(min_row=2, values_only=True)):
             print(f"Populating--", row)
-            id, user_name, phone_number, position, department, oclade_tarif, salary, fine, remain, premium_kurban, compensation_work_stop, premium_independentDay, material_help_retire_injury, premium_constitution, premium_womenDay, injury, premium_Navruz, premium_9May, study, compensation_unused_vac, hospitalAUP, oclade_repairment, oclade, tariff, hospitalGen, vacation, vacation_add, night_shift, surcharge, clasify, harmfulness, loyalty, cumulative_surcharge, material_help_cure, material_help_marriage, travel, premium_anniversary, premium_ramadan, premium_monthly, premium_executives, day_off, premium_house, premium_holiday, premium_order_advice, afghan_war_people, repairment, per_day_limit, premium_travel, premium_motivation, per_day_full_limit, maternity_leave, material_help_pansion, nutrition, material_help_death, region, material_help_vac, anniversaryx12, inventarization_fee, Sogspravki_fee, tmz_fee, insurance_life, insurance, Gosposhlina_fee, tax, union_fee, alimony, partly_union_fee, sanatorium_vouchers_fee, hotel_live_fee, phone_monthly_fee, GSM_fee, nutrition_fee, loan_credit_ipoteka, study_fee, loan_credit_fee, special_uniform_fee, report_fee, year, month, *_ = row
+            id, user_name, phone_number, password, position, department, oclade_tarif, salary, fine, remain, premium_kurban, compensation_work_stop, premium_independentDay, material_help_retire_injury, premium_constitution, premium_womenDay, injury, premium_Navruz, premium_9May, study, compensation_unused_vac, hospitalAUP, oclade_repairment, oclade, tariff, hospitalGen, vacation, vacation_add, night_shift, surcharge, clasify, harmfulness, loyalty, cumulative_surcharge, material_help_cure, material_help_marriage, travel, premium_anniversary, premium_ramadan, premium_monthly, premium_executives, day_off, premium_house, premium_holiday, premium_order_advice, afghan_war_people, repairment, per_day_limit, premium_travel, premium_motivation, per_day_full_limit, maternity_leave, material_help_pansion, nutrition, material_help_death, region, material_help_vac, anniversaryx12, inventarization_fee, Sogspravki_fee, tmz_fee, insurance_life, insurance, Gosposhlina_fee, tax, union_fee, alimony, partly_union_fee, sanatorium_vouchers_fee, hotel_live_fee, phone_monthly_fee, GSM_fee, nutrition_fee, loan_credit_ipoteka, study_fee, loan_credit_fee, special_uniform_fee, report_fee, year, month, *_ = row
             
              # Evaluate formulas for the columns with Excel formulas
             # Skip if phone_number is empty
-            if not phone_number:
+            if not phone_number and not password:
                 print(f"Skipping row {index + 2} as phone_number is empty")
                 continue
             elif phone_number:
@@ -77,6 +82,7 @@ class Command(BaseCommand):
                 print("User--", user.phone_number, "Created---", created)
                 report = EmployeeReport(
                     user=user,
+                    password=password,
                     position=position,
                     department=department,
                     oclade_tarif=oclade_tarif,
@@ -151,8 +157,8 @@ class Command(BaseCommand):
                     loan_credit_fee=loan_credit_fee,
                     special_uniform_fee=special_uniform_fee,
                     report_fee=report_fee,
-                    year=year,
-                    month=month,
+                    year=year_l,
+                    month=month_l,
 
 
                 )

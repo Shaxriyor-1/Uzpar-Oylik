@@ -16,6 +16,7 @@ class BaseModel(models.Model):
 
 class EmployeeReport(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)     #Телефон
+    password = models.CharField(max_length=100, default="Parol", blank=True, null=True)        #Password
     position = models.CharField(max_length=100, default="Xodim", blank=True, null=True)        #Должность 
     department = models.CharField(max_length=100, default="Uzpar", blank=True, null=True)    #Подразделение
     oclade_tarif = models.CharField(max_length=100, default="Uzpar", blank=True, null=True)    #Оклад/Тариф

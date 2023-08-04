@@ -14,6 +14,9 @@ last_month = current_date - relativedelta(months=1)
 
 year_l = last_month.year
 month_l = last_month.month
+# Convert the numeric month to a string representation
+month_string = month_l.strftime('%B')
+
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
@@ -158,7 +161,7 @@ class Command(BaseCommand):
                     special_uniform_fee=special_uniform_fee,
                     report_fee=report_fee,
                     year=year_l,
-                    month=month_l,
+                    month=month_string,
 
 
                 )

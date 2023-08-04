@@ -128,9 +128,10 @@ def handle_2023(message):
     user = User.objects.filter(tg_chat_id=message.chat.id).first()
     if message.chat.id in verified_secret_codes and verified_secret_codes[message.chat.id]:
         # Create a new keyboard with the "Ҳисоботни олиш - Июл.2023" button
-        keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
         report_button_July = KeyboardButton(text="Ҳисоботни олиш - Июл.2023")
-        keyboard.add(report_button_July)
+        back_to_the_start = KeyboardButton(text="Кайта Бошлаш")
+        keyboard.add(report_button_July, back_to_the_start)
         # Send the new keyboard as a reply to the "2023" button press
         bot.send_message(message.chat.id, "Партиянка ойини танланг:", reply_markup=keyboard)
 
@@ -141,6 +142,18 @@ def handle_other_years(message):
     user = User.objects.filter(tg_chat_id=message.chat.id).first()
     if message.chat.id in verified_secret_codes and verified_secret_codes[message.chat.id]:
         bot.send_message(message.chat.id, "Хозирча малумот мавжуд эмас.")
+
+
+@bot.message_handler(func=lambda message: message.text == "Кайта Бошлаш")
+def handle_restart(message):
+    reset_user_verification(message.chat.id)
+    keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    share_contact_button = KeyboardButton(text="Телефон ракамни юбориш", request_contact=True)
+    keyboard.add(share_contact_button)
+    welcome_text = """
+        Ассалому алейкум, Uzparavtotrans AJ даги ойликларни ҳисоби ботига уланганингиз билан табриклаймиз! Биз билан иш ҳақи миқдорларини билиб олинг. Иш ҳақини кўриш учун телефон рақамингизни юборинг.
+    """
+    bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
 
 
 

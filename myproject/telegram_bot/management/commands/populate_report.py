@@ -1,7 +1,8 @@
-import os
 import datetime
-from dateutil.relativedelta import relativedelta
+import os
+
 import openpyxl
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
@@ -15,7 +16,7 @@ last_month = current_date - relativedelta(months=1)
 year_l = last_month.year
 month_l = last_month.month
 # Convert the numeric month to a string representation
-month_string = month_l.strftime('%B')
+# month_string = month_l.strftime('%B')
 
 class Command(BaseCommand):
 
@@ -161,7 +162,7 @@ class Command(BaseCommand):
                     special_uniform_fee=special_uniform_fee,
                     report_fee=report_fee,
                     year=year_l,
-                    month=month_string,
+                    month=month_l,
 
 
                 )

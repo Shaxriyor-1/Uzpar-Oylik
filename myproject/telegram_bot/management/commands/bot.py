@@ -3,7 +3,7 @@ import logging
 import os
 
 import openpyxl
-import pandas as pd
+# import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
@@ -176,7 +176,7 @@ def handle_get_report(message):
         *Подразделение* : {report.department}
         *Должност* : __{report.position}__
         *Оклад/Тариф* : __{report.oclade_tarif}__
-
+    
     II.   *Итого начислено* : `{format_number(report.salary)}` : \n
 """
         fields_to_check = [
@@ -232,7 +232,7 @@ def handle_get_report(message):
 
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
+                return_mess += f"    {field_name.ljust(45)} {format_number(field_value).rjust(45)}, \n"         
 
         
         return_mess += f""" 
@@ -263,7 +263,7 @@ def handle_get_report(message):
             ]
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
+                return_mess += f"    {field_name}: \n               {format_number(field_value)}, \n"         
 
         
         return_mess += f""" 

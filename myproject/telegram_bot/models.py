@@ -16,25 +16,30 @@ class BaseModel(models.Model):
 
 class EmployeeReport(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)     #Телефон
-    password = models.CharField(max_length=100, default="Parol", blank=True, null=True)        #Password
     position = models.CharField(max_length=100, default="Xodim", blank=True, null=True)        #Должность 
     department = models.CharField(max_length=100, default="Uzpar", blank=True, null=True)    #Подразделение
     oclade_tarif = models.CharField(max_length=100, default="Uzpar", blank=True, null=True)    #Оклад/Тариф
+    militar_regist = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Военкомат () 
+    compensation_unused_vac = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Компенсация за неиспользованный отпуск ()
+    study = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Учеба  ()
+    premium_9May = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Премия " 9 МАЯ " ()
+    injury = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Увечье ()
+    premium_womenDay = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Премия к 8 марта ()
+    premium_Navruz = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Премия " Навруз" ()
+    premium_kurban = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Премия "Курбон Хайит"
+    premium_constitution_retire = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Приказ к дню КонституцииПенсионеры () 
+    health_problem_one = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Единоврем компенс по потери здоровья () 
+    lose_feeder_help = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Мат/помощь по потере кормильца   (Хожиев У.) () 
+    premium_independentDay = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Премия "Мустакиллик"
+    compensation_work_stop = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Компенсация  при прекрашении трудового договора
+    compensation_household_products = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Компенсация на сельхоз/продукты ()
+    prochi_nachisleniya = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Приказ на прочие начисления ()
+    hospitalAUP = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Больничный АУП ()
     salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Всего начислено
     fine = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)   #Всего удержано
     remain = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #К выплату
-    premium_kurban = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Премия "Курбон Хайит"
-    compensation_work_stop = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Компенсация  при прекрашении трудового договора
-    premium_independentDay = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Премия "Мустакиллик"
     material_help_retire_injury = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Матер/ная помощь пенсионерам и инвалидам
     premium_constitution = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Приказ к дню Конституции
-    premium_womenDay = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Премия к 8 марта ()
-    injury = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Увечье ()
-    premium_Navruz = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Премия " Навруз" ()
-    premium_9May = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Премия " 9 МАЯ " ()
-    study = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Учеба  ()
-    compensation_unused_vac = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Компенсация за неиспользованный отпуск ()
-    hospitalAUP = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Больничный АУП ()
     oclade_repairment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  # Часовой тариф
     oclade = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  # Оклад (001)
     tariff = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  # Тариф (002)

@@ -19,7 +19,7 @@ class EmployeeReport(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)     #Телефон
     position = models.CharField(max_length=100, default="Xodim", blank=True, null=True)        #Должность 
     department = models.CharField(max_length=100, default="Uzpar", blank=True, null=True)    #Подразделение
-    oclade_tarif = models.CharField(max_length=100, default="Uzpar", blank=True, null=True)    #Оклад/Тариф
+    oclade_tarif = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Оклад/Тариф
     militar_regist = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True, null=True)  #Военкомат () 
     compensation_unused_vac = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Компенсация за неиспользованный отпуск ()
     study = models.DecimalField(max_digits=10, decimal_places=2, default= 0.00, blank=True, null=True)  #  Учеба  ()

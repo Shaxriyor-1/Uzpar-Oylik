@@ -164,7 +164,7 @@ def handle_get_report(message):
             # Get all unique years from the EmployeeReport model
         # unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
         report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
-        if report:
+        if report :
 
 
                 return_mess = f"""
@@ -192,13 +192,13 @@ def handle_get_report(message):
             ("Учеба", report.study),
             ("Компенсация за неиспользованный отпуск", report.compensation_unused_vac),
             ("Больничный АУП", report.hospitalAUP),
-            ("Оклад за дни ремонта", report.oclade_repairment),
-            ("Оклад", report.oclade),
-            ("Тариф", report.tariff),
-            ("Больничные", report.hospitalGen),
-            ("Отпуск ", report.vacation),
-            ("Отпуск дополнительный", report.vacation_add),
-            ("Ночные часы", report.night_shift),
+            ("Оклад за дни ремонта", report.oclade_repairment_WTF),
+            ("Оклад", report.oclade_WTF),
+            ("Тариф", report.tariff_WTF),
+            ("Больничные", report.hospital_WTF),
+            ("Отпуск ", report.vacation_WTF),
+            ("Отпуск дополнительный", report.vacation_add_WTF),
+            ("Ночные часы", report.night_shift_WTF),
             ("Надбавка", report.surcharge),
             ("Классность", report.clasify),
             ("Вредность", report.harmfulness),
@@ -221,9 +221,9 @@ def handle_get_report(message):
             ("Премия (Командировочные)", report.premium_travel),
             ("Премия о стим. раб.", report.premium_motivation),
             ("Суточные  сверх лимита", report.per_day_full_limit),
-            ("Декр. больничные", report.maternity_leave),
+            ("Декр. больничные", report.maternity_leave_WTF),
             ("Материальная помощь раздел Х пункт 9,4 (уход на пенсию)", report.material_help_pansion),
-            ("Питание (Доплата за питание)", report.nutrition),
+            ("Питание (Доплата за питание)", report.nutrition_WTF),
             ("Материальная помощь в связи со смертью", report.material_help_death),
             ("Районный коэффициент", report.region),
             ("Материальная помощь к отпуску", report.material_help_vac),
@@ -233,7 +233,7 @@ def handle_get_report(message):
 
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"    {field_name}: \n                                                  {format_number(field_value)}, \n"         
+                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
 
         
         return_mess += f""" 
@@ -247,11 +247,11 @@ def handle_get_report(message):
             ("Удержание Страхование", report.insurance),
             ("Гос/пошлина", report.Gosposhlina_fee),
             ("Подоходный налог", report.tax),
-            ("Взносы в профсоюз", report.union_fee),
+            ("Взносы в профсоюз", report.vznos_profsoyuz),
             ("Алименты", report.alimony),
-            ("Партийные взносы 0,5%", report.partly_union_fee),
+            ("Партийные взносы 0,5%", report.vznos_partly),
             ("Удержание за санаторные  путевки", report.sanatorium_vouchers_fee),
-            ("Удержание за проживание в гостинице", report.hotel_live_fee),
+            ("Удержание за проживание в гостинице", report.hotel_fee),
             ("Удержание за Сотовую связь", report.phone_monthly_fee),
             ("Удержание за ГСМ", report.GSM_fee),
             ("Удержание за питание", report.nutrition_fee),
@@ -264,7 +264,7 @@ def handle_get_report(message):
             ]
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"    {field_name}: \n                                                 {format_number(field_value)}, \n"         
+                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
 
         
         return_mess += f""" 

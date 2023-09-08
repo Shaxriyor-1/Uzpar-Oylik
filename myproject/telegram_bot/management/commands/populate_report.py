@@ -38,7 +38,11 @@ class Command(BaseCommand):
             # Reset the phone_number variable at the beginning of each iteration
             phone_number = None
             print(f"Populating--", row)
-            id, id, user_name, phone_number, position, department, oclade_tarif, id, id, id, id, id, id, id, id, id, id, id, salary, fine, remain, premium_kurban, compensation_work_stop, premium_independentDay, material_help_retire_injury, premium_constitution, premium_womenDay, injury, premium_Navruz, premium_9May, study, compensation_unused_vac, hospitalAUP, oclade_repairment, oclade, tariff, hospitalGen, vacation, vacation_add, night_shift, surcharge, clasify, harmfulness, loyalty, cumulative_surcharge, material_help_cure, material_help_marriage, travel, premium_anniversary, premium_ramadan, premium_monthly, premium_executives, day_off, premium_house, premium_holiday, premium_order_advice, afghan_war_people, repairment, per_day_limit, premium_travel, premium_motivation, per_day_full_limit, maternity_leave, material_help_pansion, nutrition, material_help_death, region, material_help_vac, anniversaryx12, inventarization_fee, Sogspravki_fee, tmz_fee, insurance_life, insurance, Gosposhlina_fee, tax, union_fee, alimony, partly_union_fee, sanatorium_vouchers_fee, hotel_live_fee, phone_monthly_fee, GSM_fee, nutrition_fee, loan_credit_ipoteka, study_fee, loan_credit_fee, special_uniform_fee, report_fee, year, month, *_ = row
+            id, user_name, phone_number, id, position, department, oclade_tarif, id, salary, fine, remain, premium_kurban, compensation_work_stop, premium_independentDay, material_help_retire_injury, premium_constitution, premium_womenDay, injury, premium_Navruz, premium_9May, study, compensation_unused_vac, hospitalAUP, oclade_repairment_WTF, oclade_WTF, tariff_WTF, hospital_WTF, vacation_WTF, vacation_add_WTF, night_shift_WTF, surcharge, clasify, harmfulness, loyalty, cumulative_surcharge, material_help_cure, material_help_marriage, travel, premium_anniversary, premium_ramadan, premium_monthly, premium_executives, day_off, premium_house, premium_holiday, premium_order_advice, afghan_war_people, repairment, per_day_limit, premium_travel, premium_motivation, per_day_full_limit, maternity_leave_WTF, material_help_pansion, nutrition_WTF, material_help_death, region, material_help_vac, anniversaryx12, inventarization_fee, Sogspravki_fee, tmz_fee, insurance_life, insurance, Gosposhlina_fee, tax, vznos_profsoyuz, alimony, vznos_partly, sanatorium_vouchers_fee, hotel_fee, phone_monthly_fee, GSM_fee, nutrition_fee, loan_credit_ipoteka, study_fee, loan_credit_fee, special_uniform_fee, report_fee, year, month, *_ = row
+            
+                # Check if 'Оклад/Тариф' is divided into two cells
+            if isinstance(oclade_tarif, tuple):
+                oclade_tarif = oclade_tarif[1]  # Use the second cell
             
              # Evaluate formulas for the columns with Excel formulas
             # Skip if phone_number is empty
@@ -106,13 +110,13 @@ class Command(BaseCommand):
                     study=study,
                     compensation_unused_vac=compensation_unused_vac,
                     hospitalAUP=hospitalAUP,
-                    oclade_repairment=oclade_repairment,
-                    oclade=oclade,
-                    tariff=tariff,
-                    hospitalGen=hospitalGen,
-                    vacation=vacation,
-                    vacation_add=vacation_add,
-                    night_shift=night_shift,
+                    oclade_repairment_WTF=oclade_repairment_WTF,
+                    oclade_WTF=oclade_WTF,
+                    tariff_WTF=tariff_WTF,
+                    hospital_WTF=hospital_WTF,
+                    vacation_WTF=vacation_WTF,
+                    vacation_add_WTF=vacation_add_WTF,
+                    night_shift_WTF=night_shift_WTF,
                     surcharge=surcharge,
                     clasify=clasify,
                     harmfulness=harmfulness,
@@ -135,9 +139,9 @@ class Command(BaseCommand):
                     premium_travel=premium_travel,
                     premium_motivation=premium_motivation,
                     per_day_full_limit=per_day_full_limit,
-                    maternity_leave=maternity_leave,
+                    maternity_leave_WTF=maternity_leave_WTF,
                     material_help_pansion=material_help_pansion,
-                    nutrition=nutrition,
+                    nutrition_WTF=nutrition_WTF,
                     material_help_death=material_help_death,
                     region=region,
                     material_help_vac=material_help_vac,
@@ -149,11 +153,11 @@ class Command(BaseCommand):
                     insurance=insurance,
                     Gosposhlina_fee=Gosposhlina_fee,
                     tax=tax,
-                    union_fee=union_fee,
+                    vznos_profsoyuz=vznos_profsoyuz,
                     alimony=alimony,
-                    partly_union_fee=partly_union_fee,
+                    vznos_partly=vznos_partly,
                     sanatorium_vouchers_fee=sanatorium_vouchers_fee,
-                    hotel_live_fee=hotel_live_fee,
+                    hotel_fee=hotel_fee,
                     phone_monthly_fee=phone_monthly_fee,
                     GSM_fee=GSM_fee,
                     nutrition_fee=nutrition_fee,

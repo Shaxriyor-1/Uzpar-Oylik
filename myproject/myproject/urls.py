@@ -22,6 +22,7 @@ from django.views.generic import RedirectView
 from telegram_bot import bot
 
 urlpatterns = [
+    path('admin/clearcache/', include('clearcache.urls')),
     path("", login_required(RedirectView.as_view(pattern_name="admin:index"))),
     path('admin/', admin.site.urls),
     path('bot/<str:token>/', bot.setup_telegram_bot),

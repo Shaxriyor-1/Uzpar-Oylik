@@ -14,7 +14,6 @@ from telebot.util import quick_markup
 # from .report import create_employee_reports_from_excel
 from telegram_bot.models import EmployeeReport
 
-
 User = get_user_model()
 
 logging.basicConfig(
@@ -29,7 +28,13 @@ bot = TeleBot(settings.TELEGRAM_BOT_TOKEN, threaded=False)
 User = get_user_model()
 
 def format_number(number):
-    return '{:,}'.format(number).replace(',', ' ')
+    if isinstance(number, (int, float)):
+        return '{:,}'.format(number).replace(',', ' ')
+    elif isinstance(number, str):
+        return number
+    else:
+        return str(number)
+
 
 # verified_secret_codes = {}
 
@@ -231,10 +236,12 @@ def handle_get_report(message):
 
             ]
 
+
+        
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0) :
-                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
-
+                return_mess += f"    {field_name}: {format_number(field_value)}, \n"
+        
         
         return_mess += f""" 
     III.   *Итого удержание* : `{format_number(report.fine)}` \n
@@ -262,9 +269,10 @@ def handle_get_report(message):
             ("Удержание согласно Акта проверки", report.report_fee),
 
             ]
+        
         for field_name, field_value in fields_to_check:
-            if (field_value is not None) and (field_value != 0) :
-                return_mess += f"    {field_name}: {format_number(field_value)}, \n"         
+            if (field_value is not None) and (field_value != 0):
+                return_mess += f"    {field_name}: {format_number(field_value)}, \n"      
 
         
         return_mess += f""" 

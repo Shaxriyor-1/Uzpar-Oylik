@@ -164,6 +164,7 @@ def handle_get_report(message):
     user = User.objects.filter(tg_chat_id=message.chat.id).first()
     # if message.chat.id in verified_secret_codes and verified_secret_codes[message.chat.id]:
         # user = User.objects.filter(tg_chat_id=message.chat.id).first()
+        
     if user:
             # Get all unique years from the EmployeeReport model
         # unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
@@ -385,7 +386,7 @@ def handle_get_report(message):
 
         
         return_mess += f""" 
-    IV.   *К выплату* : `{format_number(report.salary-report.fine-report.plastik_karta)}`
+    IV.   *К выплату* : `{format_number(report.remain)}`
         """
 
                         

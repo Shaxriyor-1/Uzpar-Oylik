@@ -29,13 +29,12 @@ User = get_user_model()
 
 def format_number(number):
     if isinstance(number, (int, float)):
-        return '{:,}'.format(number).replace(',', ' ')
+        formatted_number = '{:,}'.format(number)
+        return formatted_number.replace(',', ' ').replace('\xa0', ' ')
     elif isinstance(number, str):
-        return number
+        return number.replace('\xa0', ' ')
     else:
         return str(number)
-
-
 # verified_secret_codes = {}
 
 # def reset_user_verification(chat_id):
@@ -169,7 +168,7 @@ def handle_get_report(message):
             # Get all unique years from the EmployeeReport model
         # unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
         report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
-        if report :
+        if report is not None :
 
 
                 return_mess = f"""
@@ -186,60 +185,117 @@ def handle_get_report(message):
     II.   *Итого начислено* : `{format_number(report.salary)}` : \n
 """
         fields_to_check = [
-            ("*Премия 'Курбан Хайит'*", report.premium_kurban),
-            ("Компенсация  при прекрашении трудового договора", report.compensation_work_stop),
-            ("*Премия 'Мустакиллик'*", report.premium_independentDay),
-            ("Матер/ная помощь пенсионерам и инвалидам", report.material_help_retire_injury),
-            ("*Премия к дню Конституции*", report.premium_constitution),
-            ("Увечье", report.injury),
-            ("*Премия 'Навруз'*", report.premium_Navruz),
-            ('*Премия " 9 МАЯ "*', report.premium_9May),
+            ("Военкомат ()", report.militar_regist),
+            ("Компенсация за неиспользованный отпуск ()", report.compensation_unused_vac),
             ("Учеба", report.study),
-            ("Компенсация за неиспользованный отпуск", report.compensation_unused_vac),
+            ('*Премия " 9 МАЯ "*', report.premium_9May),
+            ("Увечье", report.injury),
+            ("*Премия к 8 марта *", report.premium_womenDay),
+            ("*Премия 'Навруз'*", report.premium_Navruz),
+            ("*Премия 'Курбан Хайит'*", report.premium_kurban),
+            ("Приказ к дню КонституцииПенсионеры ", report.premium_constitution_retire),
+            ("Единоврем компенс по потери здоровья", report.health_problem_one),
+            ("Мат/помощь по потере кормильца   (Хожиев У.)", report.lose_feeder_help_Xodjiyev),
+            ("*Премия 'Мустакиллик'*", report.premium_independentDay),
+            ("Компенсация  при прекрашении трудового договора", report.compensation_work_stop),
+            ("Компенсация на сельхоз/продукты", report.compensation_household_products),
+            ("Приказ на прочие начисления ", report.prochi_nachisleniya),
             ("Больничный АУП", report.hospitalAUP),
+            ("Приказ Трудовой кодекс 109 статья", report.trudovoy_kodeks),
+            ("Премия к 8 марта ( пенсионеры) ", report.premium_womenDay_retire),
+            ("Матер/ная помощь пенсионерам и инвалидам", report.material_help_retire_injury),
+            ("*Приказ к дню Конституции*", report.premium_constitution),
+            ("Приказ на Сельхоз/продукты", report.prikaz_product),
+            ("Школьные,учебники", report.school_items),
+            ("Мат/помощь по потере кормильца ", report.lose_feeder_help),
+            ("Отпуск льготный  ", report.otpusk_ligotniy),
+            ("Оклад (001)  ", report.oclade_WTF),
+            
             ("Оклад за дни ремонта", report.oclade_repairment_WTF),
-            ("Оклад", report.oclade_WTF),
+            
+            ("Субботник", report.Saturday_work_WTF),
+            
             ("Тариф", report.tariff_WTF),
+            
+            ("Сдельно ", report.Sdelno),
             ("Больничные", report.hospital_WTF),
+
             ("Отпуск ", report.vacation_WTF),
+
             ("Отпуск дополнительный", report.vacation_add_WTF),
+
+            ("Отпуск по беременности и родам ", report.vacation_pregnancy),
             ("Ночные часы", report.night_shift_WTF),
+
             ("Надбавка", report.surcharge),
+            ("Надбавка % (учавствует в расчете Районного Коэффицента) ", report.surcharge_ragional_coef),
+            ("Надбавка по приказу", report.surcharge_acc_ord),
             ("Классность", report.clasify),
             ("Вредность", report.harmfulness),
+            ("Доплата Надбавка (надбавка за личный вклад)", report.surcharge_advance_pay),
             ("Выслугу лет", report.loyalty),
+            ("Неявка", report.neyavka),
             ("Доплата за совмещение", report.cumulative_surcharge),
-            ("Мат. пом. на лечение (раздел 9 пункт 9.16 стац лечение)", report.material_help_cure),
+            ("Материальная помощь (пенсионерам)", report.material_help_pansion),
             ("Материальная помощь по  (бракосочетание)", report.material_help_marriage),
+            ("Материальная помощь", report.material_help),
+            ("Мат. пом. на лечение (раздел 9 пункт 9.16 стац лечение)", report.material_help_cure),
+            ("Материальная помощь в связи с тяжелым материальными положением", report.material_help_tough_situation),
+            ("Пенсия", report.pansion),
+            ("Пособие по уходу за ребенком от 2 до 3 лет", report.childcare_2_and_3),
+            ("Пособие по уходу за ребенком до 2-х лет", report.childcare_upto_2),
             ("Командировочные ", report.travel),
-            ("*Единовременная премия к юбилею*", report.premium_anniversary),
             ("*ПРЕМИЯ Руза хайит*", report.premium_ramadan),
+            ("*Единовременная премия за рац. предложение*", report.premium_one_time_racism),
+            ("*Единовременная премия к юбилею*", report.premium_anniversary),
+            ("Перерасчет за предыдущий месяц", report.last_month_account),
+            ("Премия по хоз деятельности", report.premium_house),
             ("Месячная премия", report.premium_monthly),
             ("Премия исполнительному Органу АО 'Узпаравтотранс'", report.premium_executives),
             ("Выходные", report.day_off),
-            ("Премия по хоз деятельности", report.premium_house),
-            ("*Премия к празднику*", report.premium_holiday),
+            ("Премия награждение почетной граммотой ", report.premium_award_diploma),
+            ("Трудовое соглашение ", report.labor_agreement),
+            ("Премия к празднику", report.premium_holiday),
+            ("Квартальная премия", report.premium_quarters),
+            ("Перерасчет выслуги лет", report.last_month_account_loyalty),
+            ("Надбавка за вредность во время ремонта техники", report.surcharge_harm_repairment_WTF),
+
+            ("Отпускные по кол. договору", report.vacation_contract),
             ("Приказ № наблюдат/совет", report.premium_order_advice),
             ("*Доплата участникам афганской войны*", report.afghan_war_people),
+            ("*Премия РММ*", report.premium_PMM),
             ("Ремонт", report.repairment),
             ("Суточные по лимиту", report.per_day_limit),
+            ("Зарплата  13 Я", report.salary_13month),
             ("Премия (Командировочные)", report.premium_travel),
-            ("Премия о стим. раб.", report.premium_motivation),
+            ("Премия ", report.premium_general),
             ("Суточные  сверх лимита", report.per_day_full_limit),
+            ("Премия о стим. раб.", report.premium_motivation),
             ("Декр. больничные", report.maternity_leave_WTF),
-            ("Материальная помощь раздел Х пункт 9,4 (уход на пенсию)", report.material_help_pansion),
+            
+            ("Материальная помощь раздел Х пункт 9,4 (уход на пенсию)", report.material_help_pansion_starting),
+
             ("Питание (Доплата за питание)", report.nutrition_WTF),
+            
+            ("*Премия по приказу за скважины*", report.premium_skvajini),
+            ("*Премия кол.договор*", report.premium_contract),
+            ("*Премия за цвет мет. *", report.premium_svet),
             ("Материальная помощь в связи со смертью", report.material_help_death),
+            ("*Премия за ТБ*", report.premium_TB),
+            ("Школьный", report.schooler),
+            ("Новый год ", report.New_Year),
             ("Районный коэффициент", report.region),
             ("Материальная помощь к отпуску", report.material_help_vac),
             ("*Юбиляры до 12минЗП*", report.anniversaryx12),
+            ("*13 зарплата*", report.salary_13th),
+            
 
             ]
 
 
         
         for field_name, field_value in fields_to_check:
-            if (field_value is not None) and (field_value != 0) :
+            if field_value and (field_value != 0) :
                 return_mess += f"    {field_name}: {format_number(field_value)}, \n"
         
         
@@ -247,26 +303,79 @@ def handle_get_report(message):
     III.   *Итого удержание* : `{format_number(report.fine)}` \n
 """
         fields_to_check = [
+            ("Удержание за коммунальные услуги", report.communal_fee),
+            ("Возврат дебиторской задолжности", report.vozvrat_debitor_fee),
+            ("Возврат под/налога за обучение", report.tax_free_education),
+            ("Удержание за приобретения книг", report.book_take_fee),
             ("Удержание  по акту инвентаризации", report.inventarization_fee),
-            ("Сог.справки", report.Sogspravki_fee),
+            ("Возврат возмещение ущерба", report.usherb_return_1),
+            ("Страхование  жизни", report.insurance_life),
+            ("Сог.заявлению Рахимов Г.", report.sog_zayav_Rakhimov),
+            ("Удержание за юридические услуги", report.yuridik_uslugi),
+            ("Возврат з/ты", report.return_salary),
+            ("Зароботная плата", report.zarabotnaya_plata),
+            ("Договор № 3 от 7/02/18г Дустов Мизроб", report.dogovor_dostovMizrob),
+            ("Удержание за аккумуляторы", report.accumulator_fee),
             ("Удержание за приобретения ТМЦ'", report.tmz_fee),
-            ("Страхование  жизни ", report.insurance_life),
-            ("Удержание Страхование", report.insurance),
+            ("Сог.справки", report.Sogspravki_fee),
+            ("Удержано из з/п подоходный налог", report.income_tax_manual),
             ("Гос/пошлина", report.Gosposhlina_fee),
+            ("Удержание за телефон", report.telephone_fee),
+            ("Удержание на водит/е права", report.driver_licence_fee),
+            ("Удержание с работников за автоуслуги", report.avtouslugi_worker_fee),
+            ("Удержание Страхование", report.insurance),
+            ("Возврат возмещение ущерба ", report.usherb_return_2),
+            ("Почтовые расходы ", report.postal_expenditures),
+            ("Возмещение по з/п ", report.vozmesheni_salary),
+            ("Удержание Военкомат ", report.militar_regist_fee),
+            ("Удержание Ж/О № 3 ", report.jurnal_order3_fee),
+            ("Возврат (контракт) ", report.contract_return),
+            ("Удержание за автошины ", report.car_fee),
+            ("Микрокредит ", report.micro_loan),
+            ("Удержание за лечение ", report.recovery_fee),
+            ("Удержание за Воду ", report.water_fee),
+            ("Договор № 6 Бухоро ЭКО тур ", report.dogovor_Buxoro_EKO_TUR),
+            ("Договор № 5135-08 ( ЛГМ) ", report.dogovor_5135LGM),
+            ("журнал ордер № 3 удерж,из з/п ", report.jurnal_order3_fee),
             ("Подоходный налог", report.tax),
+            ("Взносы в пенсионный фонд", report.vznos_pensiya),
             ("Взносы в профсоюз", report.vznos_profsoyuz),
+            ("Добровольный ИНПС", report.reluctant_INPS),
+            ("Пласт. карточка (Заработная плата на пл.карту)", report.plastik_karta),
             ("Алименты", report.alimony),
+            ("Алименты почтовый сбор", report.alimony_postal_gain),
+            ("Удержание в пользу учебного заведения", report.uchebnoy_zavedeniya_fee),
+            ("Классность", report.clasify_fee),
+            ("Выплата отпускных", report.viplata_otpusk),
+            ("Выплата отпускных по кол договору", report.viplata_otpusk_dogovor),
+            ("Общежите", report.hostel_fee),
             ("Партийные взносы 0,5%", report.vznos_partly),
+            ("Перерасчет ", report.pereraschot),
+            ("Субботник  ", report.saturday_fee),
+            ("Удержание за путевки в лагерь ", report.campus_fee),
             ("Удержание за санаторные  путевки", report.sanatorium_vouchers_fee),
+            ("Удержание", report.fee_general),
             ("Удержание за проживание в гостинице", report.hotel_fee),
+            ("Удержание банк ", report.bank_fee),
             ("Удержание за Сотовую связь", report.phone_monthly_fee),
             ("Удержание за ГСМ", report.GSM_fee),
+            ("Удержание Гор/Газ ", report.GorGaz_fee),
+            ("Удержание за землю  ", report.land_owe_fee),
             ("Удержание за питание", report.nutrition_fee),
+            ("Удержание за электроэнергию ", report.electricity_fee),
+            ("Удержание кредит", report.loan_credit_fee),
+            ("Удержание Ипотечный кредит ( без льгот) ", report.loan_credit_ipoteka_no_ligota),
+            ("Удержание  кредит Овердрафт  ", report.loan_credit_OVERDRAFT),
             ("Удержание Ипотечный кредит", report.loan_credit_ipoteka),
             ("Удержание За обучение (уменьшает НОБ)", report.study_fee),
-            ("Удержание кредит", report.loan_credit_fee),
+            ("Потребительский кредит", report.loan_credit_consume),
             ("Удержание спец.одежды", report.special_uniform_fee),
+            ("Штрафные  санкции с работников (Наказание)", report.sanksium_fee_charge_workers),
+            ("Штрафные санкции", report.sanksium_general),
+            ("за аренду столовой", report.canteen_rent),
             ("Удержание согласно Акта проверки", report.report_fee),
+            ("Удержание за домашнюю связь", report.home_connect_fee),
+            
 
             ]
         
@@ -276,7 +385,7 @@ def handle_get_report(message):
 
         
         return_mess += f""" 
-    IV.   *К выплату* : `{format_number(report.remain)}`
+    IV.   *К выплату* : `{format_number(report.salary-report.fine-report.plastik_karta)}`
         """
 
                         

@@ -45,15 +45,23 @@ class EmployeeReport(BaseModel):
     lose_feeder_help = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #Мат/помощь по потере кормильца () 
     otpusk_ligotniy = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #Отпуск льготный ()
     oclade_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  # Оклад (001)
+    oclade_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #Оклад (001)split
     oclade_repairment_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  #Оклад за дни ремонта (001)
+    oclade_repairment_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #Оклад за дни ремонта (001)split
     Saturday_work_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  #Субботник (001)
+    Saturday_work_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #Субботник (001)split
     tariff_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  # Тариф (002)
+    tariff_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #Тариф (002)split
     Sdelno = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Сдельно (003)
     hospital_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  # Больничные (004)
+    hospital_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #  Больничные (004)split
     vacation_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  #  Отпуск (005)
+    vacation_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #  Отпуск (005)split
     vacation_add_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  #  Отпуск дополнительный (006)
+    vacation_add_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  #  Отпуск дополнительный (006)split
     vacation_pregnancy = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)  #Отпуск по беременности и родам (007)
     night_shift_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  #  Ночные часы (010)
+    night_shift_WWF = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)  #Ночные часы (010)split
     surcharge = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)  #  Надбавка % (013)
     surcharge_ragional_coef = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)  #  Надбавка % (учавствует в расчете Районного Коэффицента) (013)
     surcharge_acc_ord = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)  #  Надбавка по приказу (014)
@@ -86,6 +94,7 @@ class EmployeeReport(BaseModel):
     premium_quarters = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Квартальная премия (050)
     last_month_account_loyalty = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)    # Перерасчет выслуги лет (054)
     surcharge_harm_repairment_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)    # Надбавка за вредность во время ремонта техники (055)
+    surcharge_harm_repairment_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)    # Надбавка за вредность во время ремонта техники (055)split
     vacation_contract = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)    # Отпускные по кол. договору (056)
     premium_order_advice = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Приказ № наблюдат/совет (057)
     afghan_war_people = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Доплата участникам афганской войны (058)
@@ -98,8 +107,10 @@ class EmployeeReport(BaseModel):
     per_day_full_limit = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Суточные  сверх лимита (064)
     premium_motivation = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Премия о стим. раб. (064)
     maternity_leave_WTF = models.CharField(max_length=150, default="oklad", blank=True, null=True)  # Декр. больничные (065)
+    maternity_leave_WWF = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)  # Декр. больничные (065)split
     material_help_pansion_starting = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)  # Материальная помощь раздел Х пункт 9,4 (уход на пенсию) (066)
     nutrition_WTF = models.CharField(max_length=150, default="nutrition", blank=True, null=True)   # Питание (Доплата за питание) (067)
+    nutrition_WWF = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Питание (Доплата за питание) (067)split
     premium_skvajini = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Премия по приказу за скважины (068)
     premium_contract = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Премия кол.договор (068)
     premium_svet = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, blank=True, null=True)  # Премия за цвет мет. (068)
@@ -151,6 +162,8 @@ class EmployeeReport(BaseModel):
     vznos_profsoyuz = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   # Взносы в профсоюз (003)
     reluctant_INPS = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   # Добровольный ИНПС (004)
     plastik_karta = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   #Пласт. карточка (Заработная плата на пл.карту) (005)
+    kassa = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   #Касса (Заработная плата) (005)
+    avans = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   #Аванс (006)
     alimony = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   # Алименты (009)
     alimony_postal_gain = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   # Алименты почтовый сбор (010)
     uchebnoy_zavedeniya_fee = models.DecimalField(max_digits=20, decimal_places=2, default= 0.00, blank=True, null=True)   #Удержание в пользу учебного заведения (011)

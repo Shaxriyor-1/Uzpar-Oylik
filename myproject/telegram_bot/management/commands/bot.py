@@ -169,10 +169,30 @@ def handle_get_report(message):
             # Get all unique years from the EmployeeReport model
         # unique_years = EmployeeReport.objects.filter(user=user).values_list('year', flat=True).distinct()
         report = EmployeeReport.objects.filter(user=user).order_by("-created_at").first()
-        if report is not None :
+        # Assuming 'report' is an instance of your 'EmployeeReport' model
+
+        if report.plastik_karta is not None:
+            if report.kassa is not None:
+                if report.avans is not None:
+                    actual_fine = report.fine - report.kassa - report.plastik_karta - report.avans
+                else:
+                    actual_fine = report.fine - report.kassa - report.plastik_karta
+            elif report.avans is not None:
+                actual_fine = report.fine - report.plastik_karta - report.avans
+            else:
+                actual_fine = report.fine - report.plastik_karta
+        elif report.kassa is not None:
+            if report.avans is not None:
+                actual_fine = report.fine - report.kassa - report.avans
+            else:
+                actual_fine = report.fine - report.kassa
+        elif report.avans is not None:
+            actual_fine = report.fine - report.avans
+        else:
+            actual_fine = report.fine
 
 
-                return_mess = f"""
+        return_mess = f"""
         Aссалому алейкум 'Uzparavtotrans' AJ ходими. Сизда {report.month}.{report.year} сана бўйича қуйидаги маълумотлар топилди:
         
     Расчетный листок за {report.month}.{report.year}г.
@@ -211,23 +231,23 @@ def handle_get_report(message):
             ("Мат/помощь по потере кормильца ", report.lose_feeder_help),
             ("Отпуск льготный  ", report.otpusk_ligotniy),
             ("Оклад (001)  ", report.oclade_WTF),
-            
+            ("Оклад сумма  ", report.oclade_WWF),
             ("Оклад за дни ремонта", report.oclade_repairment_WTF),
-            
+            ("Оклад за дни ремонта сумма", report.oclade_repairment_WWF),
             ("Субботник", report.Saturday_work_WTF),
-            
+            ("Субботник сумма", report.Saturday_work_WWF),
             ("Тариф", report.tariff_WTF),
-            
+            ("Тариф сумма", report.tariff_WWF),
             ("Сдельно ", report.Sdelno),
             ("Больничные", report.hospital_WTF),
-
+            ("Больничные сумма", report.hospital_WWF),
             ("Отпуск ", report.vacation_WTF),
-
+            ("Отпуск сумма ", report.vacation_WWF),
             ("Отпуск дополнительный", report.vacation_add_WTF),
-
+            ("Отпуск дополнительный сумма", report.vacation_add_WWF),
             ("Отпуск по беременности и родам ", report.vacation_pregnancy),
             ("Ночные часы", report.night_shift_WTF),
-
+            ("Ночные часы сумма", report.night_shift_WWF),
             ("Надбавка", report.surcharge),
             ("Надбавка % (учавствует в расчете Районного Коэффицента) ", report.surcharge_ragional_coef),
             ("Надбавка по приказу", report.surcharge_acc_ord),
@@ -260,7 +280,7 @@ def handle_get_report(message):
             ("Квартальная премия", report.premium_quarters),
             ("Перерасчет выслуги лет", report.last_month_account_loyalty),
             ("Надбавка за вредность во время ремонта техники", report.surcharge_harm_repairment_WTF),
-
+            ("Надбавка за вредность во время ремонта техники сумма", report.surcharge_harm_repairment_WWF),
             ("Отпускные по кол. договору", report.vacation_contract),
             ("Приказ № наблюдат/совет", report.premium_order_advice),
             ("*Доплата участникам афганской войны*", report.afghan_war_people),
@@ -273,11 +293,10 @@ def handle_get_report(message):
             ("Суточные  сверх лимита", report.per_day_full_limit),
             ("Премия о стим. раб.", report.premium_motivation),
             ("Декр. больничные", report.maternity_leave_WTF),
-            
+            ("Декр. больничные сумма", report.maternity_leave_WWF),
             ("Материальная помощь раздел Х пункт 9,4 (уход на пенсию)", report.material_help_pansion_starting),
-
             ("Питание (Доплата за питание)", report.nutrition_WTF),
-            
+            ("Питание (Доплата за питание) сумма", report.nutrition_WWF),
             ("*Премия по приказу за скважины*", report.premium_skvajini),
             ("*Премия кол.договор*", report.premium_contract),
             ("*Премия за цвет мет. *", report.premium_svet),
@@ -301,7 +320,7 @@ def handle_get_report(message):
         
         
         return_mess += f""" 
-    III.   *Итого удержание* : `{format_number(report.fine)}` \n
+    III.   *Итого удержание* : `{format_number(actual_fine)}` \n
 """
         fields_to_check = [
             ("Удержание за коммунальные услуги", report.communal_fee),
@@ -342,7 +361,6 @@ def handle_get_report(message):
             ("Взносы в пенсионный фонд", report.vznos_pensiya),
             ("Взносы в профсоюз", report.vznos_profsoyuz),
             ("Добровольный ИНПС", report.reluctant_INPS),
-            ("Пласт. карточка (Заработная плата на пл.карту)", report.plastik_karta),
             ("Алименты", report.alimony),
             ("Алименты почтовый сбор", report.alimony_postal_gain),
             ("Удержание в пользу учебного заведения", report.uchebnoy_zavedeniya_fee),
@@ -386,7 +404,7 @@ def handle_get_report(message):
 
         
         return_mess += f""" 
-    IV.   *К выплату* : `{format_number(report.remain)}`
+    IV.   *К выплату* : `{format_number(report.salary - actual_fine)}`
         """
 
                         

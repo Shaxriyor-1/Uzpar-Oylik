@@ -38,7 +38,7 @@ class Command(BaseCommand):
             # Reset the phone_number variable at the beginning of each iteration
             phone_number = None
             print(f"Populating--", row)
-            id, id, user_name, phone_number, position, department, oclade_tarif, id, id, id, id, id, id, id, id, id, id, id, militar_regist, compensation_unused_vac, study, premium_9May, injury, premium_womenDay, premium_Navruz, premium_kurban, premium_constitution_retire, health_problem_one, lose_feeder_help_Xodjiyev, premium_independentDay, compensation_work_stop, compensation_household_products, prochi_nachisleniya, hospitalAUP, trudovoy_kodeks, premium_womenDay_retire, material_help_retire_injury, premium_constitution, prikaz_product, school_items, lose_feeder_help, otpusk_ligotniy, oclade_WTF, id, oclade_repairment_WTF, id, Saturday_work_WTF, id, tariff_WTF, id, Sdelno, hospital_WTF, id, vacation_WTF, id, vacation_add_WTF, id, vacation_pregnancy, night_shift_WTF, id, surcharge, surcharge_ragional_coef, surcharge_acc_ord, clasify, harmfulness, surcharge_advance_pay, loyalty, neyavka, cumulative_surcharge, material_help_pansion, material_help_marriage, material_help, material_help_cure, material_help_tough_situation, pansion, childcare_2_and_3, childcare_upto_2, travel, premium_ramadan, premium_one_time_racism, premium_anniversary, last_month_account, premium_house, premium_monthly, premium_executives, day_off, premium_award_diploma, labor_agreement, premium_holiday, premium_quarters, last_month_account_loyalty, surcharge_harm_repairment_WTF, id, vacation_contract, premium_order_advice, afghan_war_people, premium_PMM, repairment, per_day_limit, salary_13month, premium_travel, premium_general, per_day_full_limit, premium_motivation, maternity_leave_WTF, id, material_help_pansion_starting, nutrition_WTF, id, premium_skvajini, premium_contract, premium_svet, material_help_death, premium_TB, schooler, New_Year, region, material_help_vac, anniversaryx12, salary_13th, salary, communal_fee, vozvrat_debitor_fee, tax_free_education, book_take_fee, inventarization_fee, usherb_return_1, insurance_life, sog_zayav_Rakhimov, yuridik_uslugi, id, return_salary, zarabotnaya_plata, dogovor_dostovMizrob, accumulator_fee, tmz_fee, Sogspravki_fee, income_tax_manual, Gosposhlina_fee, telephone_fee, driver_licence_fee, avtouslugi_worker_fee, insurance, usherb_return_2, postal_expenditures, vozmesheni_salary, militar_regist_fee, JO_fee, contract_return, car_fee, micro_loan, id, recovery_fee, water_fee, dogovor_Buxoro_EKO_TUR, dogovor_5135LGM, jurnal_order3_fee, tax, vznos_pensiya, vznos_profsoyuz, reluctant_INPS, plastik_karta, id, id, alimony, alimony_postal_gain, uchebnoy_zavedeniya_fee, clasify_fee, viplata_otpusk, viplata_otpusk_dogovor, hostel_fee, vznos_partly, pereraschot, saturday_fee, campus_fee, sanatorium_vouchers_fee, fee_general, hotel_fee, bank_fee, phone_monthly_fee, GSM_fee, GorGaz_fee, land_owe_fee, nutrition_fee, electricity_fee, loan_credit_fee, loan_credit_ipoteka_no_ligota, loan_credit_OVERDRAFT, loan_credit_ipoteka, study_fee, loan_credit_consume, special_uniform_fee, sanksium_fee_charge_workers, sanksium_general, canteen_rent, report_fee, home_connect_fee, fine, id, id, remain, id, id, *_ = row
+            id, id, user_name, phone_number, position, department, oclade_tarif, id, id, id, id, id, id, id, id, id, id, id, militar_regist, compensation_unused_vac, study, premium_9May, injury, premium_womenDay, premium_Navruz, premium_kurban, premium_constitution_retire, health_problem_one, lose_feeder_help_Xodjiyev, premium_independentDay, compensation_work_stop, compensation_household_products, prochi_nachisleniya, hospitalAUP, trudovoy_kodeks, premium_womenDay_retire, material_help_retire_injury, premium_constitution, prikaz_product, school_items, lose_feeder_help, otpusk_ligotniy, oclade_WTF, oclade_WWF, oclade_repairment_WTF, oclade_repairment_WWF, Saturday_work_WTF, Saturday_work_WWF, tariff_WTF, tariff_WWF, Sdelno, hospital_WTF, hospital_WWF, vacation_WTF, vacation_WWF, vacation_add_WTF, vacation_add_WWF, vacation_pregnancy, night_shift_WTF, night_shift_WWF, surcharge, surcharge_ragional_coef, surcharge_acc_ord, clasify, harmfulness, surcharge_advance_pay, loyalty, neyavka, cumulative_surcharge, material_help_pansion, material_help_marriage, material_help, material_help_cure, material_help_tough_situation, pansion, childcare_2_and_3, childcare_upto_2, travel, premium_ramadan, premium_one_time_racism, premium_anniversary, last_month_account, premium_house, premium_monthly, premium_executives, day_off, premium_award_diploma, labor_agreement, premium_holiday, premium_quarters, last_month_account_loyalty, surcharge_harm_repairment_WTF, surcharge_harm_repairment_WWF, vacation_contract, premium_order_advice, afghan_war_people, premium_PMM, repairment, per_day_limit, salary_13month, premium_travel, premium_general, per_day_full_limit, premium_motivation, maternity_leave_WTF, maternity_leave_WWF, material_help_pansion_starting, nutrition_WTF, nutrition_WWF, premium_skvajini, premium_contract, premium_svet, material_help_death, premium_TB, schooler, New_Year, region, material_help_vac, anniversaryx12, salary_13th, salary, communal_fee, vozvrat_debitor_fee, tax_free_education, book_take_fee, inventarization_fee, usherb_return_1, insurance_life, sog_zayav_Rakhimov, yuridik_uslugi, id, return_salary, zarabotnaya_plata, dogovor_dostovMizrob, accumulator_fee, tmz_fee, Sogspravki_fee, income_tax_manual, Gosposhlina_fee, telephone_fee, driver_licence_fee, avtouslugi_worker_fee, insurance, usherb_return_2, postal_expenditures, vozmesheni_salary, militar_regist_fee, JO_fee, contract_return, car_fee, micro_loan, id, recovery_fee, water_fee, dogovor_Buxoro_EKO_TUR, dogovor_5135LGM, jurnal_order3_fee, tax, vznos_pensiya, vznos_profsoyuz, reluctant_INPS, plastik_karta, kassa, avans, alimony, alimony_postal_gain, uchebnoy_zavedeniya_fee, clasify_fee, viplata_otpusk, viplata_otpusk_dogovor, hostel_fee, vznos_partly, pereraschot, saturday_fee, campus_fee, sanatorium_vouchers_fee, fee_general, hotel_fee, bank_fee, phone_monthly_fee, GSM_fee, GorGaz_fee, land_owe_fee, nutrition_fee, electricity_fee, loan_credit_fee, loan_credit_ipoteka_no_ligota, loan_credit_OVERDRAFT, loan_credit_ipoteka, study_fee, loan_credit_consume, special_uniform_fee, sanksium_fee_charge_workers, sanksium_general, canteen_rent, report_fee, home_connect_fee, fine, id, id, remain, id, id, *_ = row
             
             
              # Evaluate formulas for the columns with Excel formulas
@@ -117,15 +117,23 @@ class Command(BaseCommand):
                     lose_feeder_help = lose_feeder_help,
                     otpusk_ligotniy = otpusk_ligotniy,
                     oclade_WTF = oclade_WTF,
+                    oclade_WWF = oclade_WWF,
                     oclade_repairment_WTF = oclade_repairment_WTF,
+                    oclade_repairment_WWF = oclade_repairment_WWF,
                     Saturday_work_WTF = Saturday_work_WTF,
+                    Saturday_work_WWF = Saturday_work_WWF,
                     tariff_WTF = tariff_WTF,
+                    tariff_WWF = tariff_WWF,
                     Sdelno = Sdelno,
                     hospital_WTF = hospital_WTF,
+                    hospital_WWF = hospital_WWF,
                     vacation_WTF = vacation_WTF,
+                    vacation_WWF = vacation_WWF,
                     vacation_add_WTF = vacation_add_WTF,
+                    vacation_add_WWF = vacation_add_WWF,
                     vacation_pregnancy = vacation_pregnancy,
                     night_shift_WTF = night_shift_WTF,
+                    night_shift_WWF = night_shift_WWF,
                     surcharge = surcharge,
                     surcharge_ragional_coef = surcharge_ragional_coef,
                     surcharge_acc_ord = surcharge_acc_ord,
@@ -158,6 +166,7 @@ class Command(BaseCommand):
                     premium_quarters = premium_quarters,
                     last_month_account_loyalty = last_month_account_loyalty,
                     surcharge_harm_repairment_WTF = surcharge_harm_repairment_WTF,
+                    surcharge_harm_repairment_WWF = surcharge_harm_repairment_WWF,
                     vacation_contract = vacation_contract,
                     premium_order_advice = premium_order_advice,
                     afghan_war_people = afghan_war_people,
@@ -170,8 +179,10 @@ class Command(BaseCommand):
                     per_day_full_limit = per_day_full_limit,
                     premium_motivation = premium_motivation,
                     maternity_leave_WTF = maternity_leave_WTF,
+                    maternity_leave_WWF = maternity_leave_WWF,
                     material_help_pansion_starting = material_help_pansion_starting,
                     nutrition_WTF = nutrition_WTF,
+                    nutrition_WWF = nutrition_WWF,
                     premium_skvajini = premium_skvajini,
                     premium_contract = premium_contract,
                     premium_svet = premium_svet,
@@ -223,6 +234,8 @@ class Command(BaseCommand):
                     vznos_profsoyuz = vznos_profsoyuz,
                     reluctant_INPS = reluctant_INPS,
                     plastik_karta = plastik_karta,
+                    kassa = kassa,
+                    avans = avans,
                     alimony = alimony,
                     alimony_postal_gain = alimony_postal_gain,
                     uchebnoy_zavedeniya_fee = uchebnoy_zavedeniya_fee,

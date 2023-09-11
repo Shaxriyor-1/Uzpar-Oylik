@@ -27,14 +27,36 @@ bot = TeleBot(settings.TELEGRAM_BOT_TOKEN, threaded=False)
 
 User = get_user_model()
 
-def format_number(number):
-    if isinstance(number, (int, float)):
-        formatted_number = '{:,}'.format(number)
-        return formatted_number.replace(',', ' ').replace('\xa0', ' ')
-    elif isinstance(number, str):
-        return number.replace('\xa0', ' ')
-    else:
-        return str(number)
+
+def format_number_with_spaces(number):
+    # Convert the number to a string
+    number_str = str(number)
+    
+    # Extract the last 3 characters (decimal part)
+    decimal_part = number_str[-3:]
+    
+    # Remove the last 3 characters
+    number_str = number_str[:-3]
+    
+    # Initialize an empty result string
+    result = ""
+    
+    # Iterate through the characters in the reversed number string
+    for i, char in enumerate(reversed(number_str)):
+        # Add the character to the result string
+        result = char + result
+        
+        # Add a space after every 3 digits, except for the last group
+        if i % 3 == 2 and i != len(number_str) - 1:
+            result = " " + result
+    
+    # Add the decimal part
+    result += decimal_part
+    
+    return result
+
+
+    
 # verified_secret_codes = {}
 
 # def reset_user_verification(chat_id):
@@ -203,7 +225,7 @@ def handle_get_report(message):
         *Должност* : __{report.position}__
         *Оклад/Тариф* : __{report.oclade_tarif}__
     
-    II.   *Итого начислено* : `{format_number(report.salary)}` : \n
+    II.   *Итого начислено* : `{format_number_with_spaces(report.salary)}` : \n
 """
         fields_to_check = [
             ("Военкомат ()", report.militar_regist),
@@ -315,12 +337,17 @@ def handle_get_report(message):
 
         
         for field_name, field_value in fields_to_check:
-            if field_value and (field_value != 0) :
-                return_mess += f"    {field_name}: {format_number(field_value)}, \n"
+            if (field_value is not None) and (field_value != 0):
+            # Check if the field_name ends with '_WTF'
+                if not field_name.endswith('_WTF'):
+                    formatted_value = format_number_with_spaces(field_value)
+                    return_mess += f"{field_name}: {formatted_value}, \n"
+                else:
+                    return_mess += f"{field_name}: {field_value}, \n"
         
         
         return_mess += f""" 
-    III.   *Итого удержание* : `{format_number(actual_fine)}` \n
+    III.   *Итого удержание* : `{format_number_with_spaces(actual_fine)}` \n
 """
         fields_to_check = [
             ("Удержание за коммунальные услуги", report.communal_fee),
@@ -397,14 +424,19 @@ def handle_get_report(message):
             
 
             ]
-        
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0):
-                return_mess += f"    {field_name}: {format_number(field_value)}, \n"      
+            # Check if the field_name ends with '_WTF'
+                if not field_name.endswith('_WTF'):
+                    formatted_value = format_number_with_spaces(field_value)
+                    return_mess += f"{field_name}: {formatted_value}, \n"
+                else:
+                    return_mess += f"{field_name}: {field_value}, \n"
+   
 
         
         return_mess += f""" 
-    IV.   *К выплату* : `{format_number(report.salary - actual_fine)}`
+    IV.   *К выплату* : `{format_number_with_spaces(report.salary - actual_fine)}`
         """
 
                         

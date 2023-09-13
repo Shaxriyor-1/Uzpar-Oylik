@@ -219,14 +219,44 @@ def handle_get_report(message):
         
     Расчетный листок за {report.month}.{report.year}г.
         
-    I.  *Телефон* : `{report.user}`
-        *Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
-        *Подразделение* : {report.department}
-        *Должност* : __{report.position}__
-        *Оклад/Тариф* : __{report.oclade_tarif}__
-    
-    II.   *Итого начислено* : `{format_number_with_spaces(report.salary)}` : \n
+    I. *Обшие данные* : \n  
+*Телефон* : `{report.user}`
+*Сотрудник* : __{report.user.first_name} {report.user.last_name} {report.user.middle_name}__
+*Подразделение* : {report.department}
+*Должност* : __{report.position}__
+*Оклад/Тариф* : __{report.oclade_tarif}__
 """
+        
+        return_mess += f""" 
+    II.   *За дни/часы* :  \n
+"""
+        fields_to_check = [
+            ("Оклад (001)  ", report.oclade_WTF),
+            ("Оклад за дни ремонта", report.oclade_repairment_WTF),
+            ("Субботник", report.Saturday_work_WTF),
+            ("Тариф", report.tariff_WTF),
+            ("Больничные", report.hospital_WTF),
+            ("Отпуск ", report.vacation_WTF),
+            ("Отпуск дополнительный", report.vacation_add_WTF),
+            ("Ночные часы", report.night_shift_WTF),
+            ("Надбавка за вредность во время ремонта техники", report.surcharge_harm_repairment_WTF),
+            ("Декр. больничные", report.maternity_leave_WTF),
+            ("Питание (Доплата за питание)", report.nutrition_WTF),
+        ]
+        
+        for field_name, field_value in fields_to_check:
+            if (field_value is not None) and (field_value != 0):
+            # Check if the field_name ends with '_WTF'
+                if not field_name.endswith('_WTF'):
+                    formatted_value = format_number_with_spaces(field_value)
+                    return_mess += f"{field_name}: {formatted_value}, \n"
+                else:
+                    return_mess += f"{field_name}: {field_value}, \n"
+        
+        return_mess += f""" 
+    III.   *Итого начислено* : `{format_number_with_spaces(report.salary)}` : \n
+"""
+                    
         fields_to_check = [
             ("Военкомат ()", report.militar_regist),
             ("Компенсация за неиспользованный отпуск ()", report.compensation_unused_vac),
@@ -252,24 +282,16 @@ def handle_get_report(message):
             ("Школьные,учебники", report.school_items),
             ("Мат/помощь по потере кормильца ", report.lose_feeder_help),
             ("Отпуск льготный  ", report.otpusk_ligotniy),
-            ("Оклад (001)  ", report.oclade_WTF),
-            ("Оклад сумма  ", report.oclade_WWF),
-            ("Оклад за дни ремонта", report.oclade_repairment_WTF),
-            ("Оклад за дни ремонта сумма", report.oclade_repairment_WWF),
-            ("Субботник", report.Saturday_work_WTF),
-            ("Субботник сумма", report.Saturday_work_WWF),
-            ("Тариф", report.tariff_WTF),
-            ("Тариф сумма", report.tariff_WWF),
+            ("Оклад ", report.oclade_WWF),
+            ("Оклад за дни ремонта ", report.oclade_repairment_WWF),
+            ("Субботник ", report.Saturday_work_WWF),
+            ("Тариф ", report.tariff_WWF),
             ("Сдельно ", report.Sdelno),
-            ("Больничные", report.hospital_WTF),
-            ("Больничные сумма", report.hospital_WWF),
-            ("Отпуск ", report.vacation_WTF),
-            ("Отпуск сумма ", report.vacation_WWF),
-            ("Отпуск дополнительный", report.vacation_add_WTF),
-            ("Отпуск дополнительный сумма", report.vacation_add_WWF),
+            ("Больничные ", report.hospital_WWF),
+            ("Отпуск  ", report.vacation_WWF),
+            ("Отпуск дополнительный ", report.vacation_add_WWF),
             ("Отпуск по беременности и родам ", report.vacation_pregnancy),
-            ("Ночные часы", report.night_shift_WTF),
-            ("Ночные часы сумма", report.night_shift_WWF),
+            ("Ночные часы ", report.night_shift_WWF),
             ("Надбавка", report.surcharge),
             ("Надбавка % (учавствует в расчете Районного Коэффицента) ", report.surcharge_ragional_coef),
             ("Надбавка по приказу", report.surcharge_acc_ord),
@@ -301,8 +323,7 @@ def handle_get_report(message):
             ("Премия к празднику", report.premium_holiday),
             ("Квартальная премия", report.premium_quarters),
             ("Перерасчет выслуги лет", report.last_month_account_loyalty),
-            ("Надбавка за вредность во время ремонта техники", report.surcharge_harm_repairment_WTF),
-            ("Надбавка за вредность во время ремонта техники сумма", report.surcharge_harm_repairment_WWF),
+            ("Надбавка за вредность во время ремонта техники ", report.surcharge_harm_repairment_WWF),
             ("Отпускные по кол. договору", report.vacation_contract),
             ("Приказ № наблюдат/совет", report.premium_order_advice),
             ("*Доплата участникам афганской войны*", report.afghan_war_people),
@@ -314,11 +335,9 @@ def handle_get_report(message):
             ("Премия ", report.premium_general),
             ("Суточные  сверх лимита", report.per_day_full_limit),
             ("Премия о стим. раб.", report.premium_motivation),
-            ("Декр. больничные", report.maternity_leave_WTF),
-            ("Декр. больничные сумма", report.maternity_leave_WWF),
+            ("Декр. больничные ", report.maternity_leave_WWF),
             ("Материальная помощь раздел Х пункт 9,4 (уход на пенсию)", report.material_help_pansion_starting),
-            ("Питание (Доплата за питание)", report.nutrition_WTF),
-            ("Питание (Доплата за питание) сумма", report.nutrition_WWF),
+            ("Питание (Доплата за питание) ", report.nutrition_WWF),
             ("*Премия по приказу за скважины*", report.premium_skvajini),
             ("*Премия кол.договор*", report.premium_contract),
             ("*Премия за цвет мет. *", report.premium_svet),
@@ -336,6 +355,7 @@ def handle_get_report(message):
 
 
         
+                    
         for field_name, field_value in fields_to_check:
             if (field_value is not None) and (field_value != 0):
             # Check if the field_name ends with '_WTF'
@@ -347,7 +367,7 @@ def handle_get_report(message):
         
         
         return_mess += f""" 
-    III.   *Итого удержание* : `{format_number_with_spaces(actual_fine)}` \n
+    IV.   *Итого удержание* : `{format_number_with_spaces(actual_fine)}` \n
 """
         fields_to_check = [
             ("Удержание за коммунальные услуги", report.communal_fee),
@@ -436,7 +456,7 @@ def handle_get_report(message):
 
         
         return_mess += f""" 
-    IV.   *К выплату* : `{format_number_with_spaces(report.salary - actual_fine)}`
+    V.   *К выплату* : `{format_number_with_spaces(report.salary - actual_fine)}`
         """
 
                         

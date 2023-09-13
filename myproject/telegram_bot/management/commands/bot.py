@@ -231,7 +231,7 @@ def handle_get_report(message):
     II.   *За дни/часы* :  \n
 """
         fields_to_check = [
-            ("Оклад (001)  ", report.oclade_WTF),
+            ("Оклад  ", report.oclade_WTF),
             ("Оклад за дни ремонта", report.oclade_repairment_WTF),
             ("Субботник", report.Saturday_work_WTF),
             ("Тариф", report.tariff_WTF),
@@ -241,7 +241,7 @@ def handle_get_report(message):
             ("Ночные часы", report.night_shift_WTF),
             ("Надбавка за вредность во время ремонта техники", report.surcharge_harm_repairment_WTF),
             ("Декр. больничные", report.maternity_leave_WTF),
-            ("Питание (Доплата за питание)", report.nutrition_WTF),
+            ("Доплата за питание", report.nutrition_WTF),
         ]
         
         for field_name, field_value in fields_to_check:
@@ -258,8 +258,8 @@ def handle_get_report(message):
 """
                     
         fields_to_check = [
-            ("Военкомат ()", report.militar_regist),
-            ("Компенсация за неиспользованный отпуск ()", report.compensation_unused_vac),
+            ("Военкомат ", report.militar_regist),
+            ("Компенсация за неиспользованный отпуск ", report.compensation_unused_vac),
             ("Учеба", report.study),
             ('*Премия " 9 МАЯ "*', report.premium_9May),
             ("Увечье", report.injury),

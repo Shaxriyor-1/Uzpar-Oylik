@@ -96,33 +96,86 @@ class Command(BaseCommand):
         # Send a welcome message with the custom keyboard
         bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
 
-    @bot.message_handler(content_types=['contact'])
-    def handle_contact(message):
-        print("message.chat.id", message.chat.id)
-        if message.contact is not None:
-            phone_number = message.contact.phone_number.lstrip('+')
-            user = User.objects.filter(phone_number=phone_number).first()
-            print("user---", user)
-            keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-            report_button_July = KeyboardButton(text="Ҳисоботни олиш")
-            back_to_the_start = KeyboardButton(text="Кайта Бошлаш")
-            keyboard.add(report_button_July, back_to_the_start)
 
-            if user:
-                user.tg_chat_id = message.chat.id
-                user.save()
+@bot.message_handler(content_types=['contact'])
+def handle_contact(message):
+    print("message.chat.id", message.chat.id)
+    if message.contact is not None and message.contact.user_id == message.from_user.id:
+        # The contact was sent using the bot's button
+        phone_number = message.contact.phone_number.lstrip('+')
+        user = User.objects.filter(phone_number=phone_number).first()
+        print("user---", user)
+        
+        keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+        report_button_July = KeyboardButton(text="Ҳисоботни олиш")
+        back_to_the_start = KeyboardButton(text="Кайта Бошлаш")
+        keyboard.add(report_button_July, back_to_the_start)
 
-                # Get first name and last name from the contact message
-                first_name = message.contact.first_name
-                last_name = message.contact.last_name
+        if user:
+            user.tg_chat_id = message.chat.id
+            user.save()
 
-                
-                bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин.",
+            # Get first name and last name from the contact message
+            first_name = message.contact.first_name
+            last_name = message.contact.last_name
+
+            bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин.",
                              reply_markup=keyboard)
+        else:
+            bot.send_message(message.chat.id,
+                             f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
+    else:
+        # The contact was sent through another method, not the bot's button
+        bot.send_message(message.chat.id, "Рухсат этилмаган уриниш! Хурматли ходим, сиз факат узингизни ракамингиз билан маьлумот олиб биласиз!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # @bot.message_handler(content_types=['contact'])
+    # def handle_contact(message):
+    #     print("message.chat.id", message.chat.id)
+    #     if message.contact is not None:
+    #         phone_number = message.contact.phone_number.lstrip('+')
+    #         user = User.objects.filter(phone_number=phone_number).first()
+    #         print("user---", user)
+    #         keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    #         report_button_July = KeyboardButton(text="Ҳисоботни олиш")
+    #         back_to_the_start = KeyboardButton(text="Кайта Бошлаш")
+    #         keyboard.add(report_button_July, back_to_the_start)
+
+    #         if user:
+    #             user.tg_chat_id = message.chat.id
+    #             user.save()
+
+    #             # Get first name and last name from the contact message
+    #             first_name = message.contact.first_name
+    #             last_name = message.contact.last_name
+
                 
-            else:
-                bot.send_message(message.chat.id,
-                                 f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
+    #             bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин.",
+    #                          reply_markup=keyboard)
+                
+    #         else:
+    #             bot.send_message(message.chat.id,
+    #                              f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
+
+
+
+
+
+
 
 # Add a handler for secret code message
 # @bot.message_handler(func=lambda message: message.text and len(message.text) == 6)

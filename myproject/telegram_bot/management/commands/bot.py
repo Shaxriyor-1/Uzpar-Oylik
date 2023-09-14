@@ -91,7 +91,7 @@ class Command(BaseCommand):
         share_contact_button = KeyboardButton(text="Телефон ракамни юбориш", request_contact=True)
         keyboard.add(share_contact_button)
         welcome_text = """
-            Ассалому алейкум, сиз "Uzparavtotrans" AJ даги ойликларни ҳисоби ботига уландингиз. Бу ерда иш ҳақи миқдорини билиб олинг. Иш ҳақини кўриш учун телефон рақамингизни юборинг.
+            Ассалому алейкум, сиз "Uzparavtotrans" AJ даги ойликларни ҳисоби ботига уландингиз. Бу ерда иш ҳақи миқдорини билиб олинг. Иш ҳақини кўриш учун пастдаги (Телефон ракамни юбориш) тугмасини босинг.
         """
         # Send a welcome message with the custom keyboard
         bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
@@ -119,7 +119,7 @@ def handle_contact(message):
             first_name = message.contact.first_name
             last_name = message.contact.last_name
 
-            bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин.",
+            bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин. Ҳисоботни олиш тугмасини босинг. ",
                              reply_markup=keyboard)
         else:
             bot.send_message(message.chat.id,
@@ -182,7 +182,7 @@ def handle_restart(message):
     share_contact_button = KeyboardButton(text="Телефон ракамни юбориш", request_contact=True)
     keyboard.add(share_contact_button)
     welcome_text = """
-        Ассалому алейкум, Uzparavtotrans AJ даги ойликларни ҳисоби ботига уланганингиз билан табриклаймиз! Биз билан иш ҳақи миқдорларини билиб олинг. Иш ҳақини кўриш учун телефон рақамингизни юборинг.
+        Ассалому алейкум, Uzparavtotrans AJ даги ойликларни ҳисоби ботига уланганингиз билан табриклаймиз! Биз билан иш ҳақи миқдорларини билиб олинг. Иш ҳақини кўриш учун Телефон ракамни юбориш тугмасини босинг.
     """
     bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
 
@@ -470,7 +470,7 @@ def handle_get_report(message):
                         
         bot.send_message(message.chat.id, return_mess, parse_mode="Markdown")
     else:
-        bot.send_message(message.chat.id, "Бундай фойдаланувчи ишчилар руйхатида мавжуд эмас! Агар бу хатолик булса босинг : /start")
+        bot.send_message(message.chat.id, "Бундай фойдаланувчи учун маьлумот киритилмаган! Агар бу хатолик булса Кайта Бошлаш тугмасини босинг. ")
 
 
     # @bot.message_handler(commands=['url'])

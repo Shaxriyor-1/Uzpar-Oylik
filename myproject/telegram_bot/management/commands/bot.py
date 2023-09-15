@@ -91,7 +91,7 @@ class Command(BaseCommand):
         share_contact_button = KeyboardButton(text="Телефон ракамни юбориш", request_contact=True)
         keyboard.add(share_contact_button)
         welcome_text = """
-            Ассалому алейкум, сиз "Uzparavtotrans" AJ даги ойликларни ҳисоби ботига уландингиз. Бу ерда иш ҳақи миқдорини билиб олинг. Иш ҳақини кўриш учун телефон рақамингизни юборинг.
+            Ассалому алейкум, сиз "Uzparavtotrans" AJ даги ойликларни ҳисоби ботига уландингиз. Бу ерда иш ҳақи миқдорини билиб олинг. Иш ҳақини кўриш учун пастдаги (Телефон ракамни юбориш) тугмасини босинг.
         """
         # Send a welcome message with the custom keyboard
         bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
@@ -119,59 +119,14 @@ def handle_contact(message):
             first_name = message.contact.first_name
             last_name = message.contact.last_name
 
-            bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин.",
+            bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин. Ҳисоботни олиш тугмасини босинг. ",
                              reply_markup=keyboard)
         else:
             bot.send_message(message.chat.id,
-                             f"Бу {phone_number} рақам билан малумот топилмади, агар ракамингиз узгарган булса ёки бошка камчилик булса хисобхона ходимларига мурожаат килинг. Ишчиларни кабул килиш вакти: Душанбадан - Жума, 9:00 - 16:00.")
+                             f"Бу {phone_number} рақам билан малумот топилмади, агар ракамингиз узгарган булса ёки бошка камчилик булса хисобхона ходимларига мурожаат килинг. Ходимларни кабул килиш вакти: Душанбадан - Жумагача, 9:00 - 16:00 оралигида.")
     else:
         # The contact was sent through another method, not the bot's button
         bot.send_message(message.chat.id, "Рухсат этилмаган уриниш! Хурматли ходим, сиз факат узингизни ракамингиз билан маьлумот олиб биласиз!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # @bot.message_handler(content_types=['contact'])
-    # def handle_contact(message):
-    #     print("message.chat.id", message.chat.id)
-    #     if message.contact is not None:
-    #         phone_number = message.contact.phone_number.lstrip('+')
-    #         user = User.objects.filter(phone_number=phone_number).first()
-    #         print("user---", user)
-    #         keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    #         report_button_July = KeyboardButton(text="Ҳисоботни олиш")
-    #         back_to_the_start = KeyboardButton(text="Кайта Бошлаш")
-    #         keyboard.add(report_button_July, back_to_the_start)
-
-    #         if user:
-    #             user.tg_chat_id = message.chat.id
-    #             user.save()
-
-    #             # Get first name and last name from the contact message
-    #             first_name = message.contact.first_name
-    #             last_name = message.contact.last_name
-
-                
-    #             bot.send_message(message.chat.id, f"Ассалому алейкум, {first_name} {last_name} ! Телефон ракамингиз кабул килинди. Иш хаки хисоботини олишингиз мумкин.",
-    #                          reply_markup=keyboard)
-                
-    #         else:
-    #             bot.send_message(message.chat.id,
-    #                              f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
-
-
 
 
 
@@ -227,7 +182,7 @@ def handle_restart(message):
     share_contact_button = KeyboardButton(text="Телефон ракамни юбориш", request_contact=True)
     keyboard.add(share_contact_button)
     welcome_text = """
-        Ассалому алейкум, Uzparavtotrans AJ даги ойликларни ҳисоби ботига уланганингиз билан табриклаймиз! Биз билан иш ҳақи миқдорларини билиб олинг. Иш ҳақини кўриш учун телефон рақамингизни юборинг.
+        Ассалому алейкум, Uzparavtotrans AJ даги ойликларни ҳисоби ботига уланганингиз билан табриклаймиз! Биз билан иш ҳақи миқдорларини билиб олинг. Иш ҳақини кўриш учун Телефон ракамни юбориш тугмасини босинг.
     """
     bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
 
@@ -294,7 +249,7 @@ def handle_get_report(message):
             ("Ночные часы", report.night_shift_WTF),
             ("Надбавка за вредность во время ремонта техники", report.surcharge_harm_repairment_WTF),
             ("Декр. больничные", report.maternity_leave_WTF),
-            ("Доплата за питание", report.nutrition_WTF),
+            ("Питание", report.nutrition_WTF),
         ]
         
         for field_name, field_value in fields_to_check:
@@ -390,7 +345,7 @@ def handle_get_report(message):
             ("Премия о стим. раб.", report.premium_motivation),
             ("Декр. больничные ", report.maternity_leave_WWF),
             ("Материальная помощь раздел Х пункт 9,4 (уход на пенсию)", report.material_help_pansion_starting),
-            ("Питание (Доплата за питание) ", report.nutrition_WWF),
+            ("Питание ", report.nutrition_WWF),
             ("*Премия по приказу за скважины*", report.premium_skvajini),
             ("*Премия кол.договор*", report.premium_contract),
             ("*Премия за цвет мет. *", report.premium_svet),
@@ -515,7 +470,7 @@ def handle_get_report(message):
                         
         bot.send_message(message.chat.id, return_mess, parse_mode="Markdown")
     else:
-        bot.send_message(message.chat.id, "Бундай фойдаланувчи ишчилар руйхатида мавжуд эмас! Агар бу хатолик булса босинг : /start")
+        bot.send_message(message.chat.id, "Бундай фойдаланувчи учун маьлумот киритилмаган! Агар бу хатолик булса Кайта Бошлаш тугмасини босинг. ")
 
 
     # @bot.message_handler(commands=['url'])

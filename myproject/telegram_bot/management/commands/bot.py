@@ -123,7 +123,7 @@ def handle_contact(message):
                              reply_markup=keyboard)
         else:
             bot.send_message(message.chat.id,
-                             f"Бу {phone_number} рақам билан малумот топилмади, ёки бу рақам егаси 'Uzparavtotrans' AJ ходими эмас.")
+                             f"Бу {phone_number} рақам билан малумот топилмади, агар ракамингиз узгарган булса ёки бошка камчилик булса хисобхона ходимларига мурожаат килинг. Ишчиларни кабул килиш вакти: Душанбадан - Жума, 9:00 - 16:00.")
     else:
         # The contact was sent through another method, not the bot's button
         bot.send_message(message.chat.id, "Рухсат этилмаган уриниш! Хурматли ходим, сиз факат узингизни ракамингиз билан маьлумот олиб биласиз!")

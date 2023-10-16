@@ -470,7 +470,7 @@ def handle_get_report(message):
                         
         bot.send_message(message.chat.id, return_mess, parse_mode="Markdown")
     else:
-        bot.send_message(message.chat.id, "Бундай фойдаланувчи учун маьлумот киритилмаган! Агар бу хатолик булса Кайта Бошлаш тугмасини босинг. ")
+        bot.send_message(message.chat.id, "Илтимос ботни кайта фаоллаштиринг! пастдаги Кайта Бошлаш тугмасини босинг. ")
 
 
     # @bot.message_handler(commands=['url'])
